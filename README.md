@@ -24,3 +24,6 @@ to know what I’m interested in talking about first. A non-exhaustive list:
 - [Generative Art](https://veitheller.de/art/)
 - [Abstractions](https://blog.veitheller.de/Abstractions.html)
 - [How you can leverage macros to implement language features](https://blog.veitheller.de/scheme-macros/)
+
+If you find any of these interesting or think you might have a different topic
+for me, [feel free to reach out](mailto:veit@veitheller.de)!
