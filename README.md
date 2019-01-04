@@ -13,6 +13,7 @@ Right now, the talks I’ve given/proposed are these:
 - [Various talks on Carp](https://github.com/hellerve/carp-talks)
 - [A talk](https://github.com/hellerve/release-party) I’ve given at the release
   party of [zepto](https://github.com/zepto-lang/zepto), a Lisp of my own making
+- [A talk on Compilers and their trust level at Datengarten 96](https://berlin.ccc.de/wiki/Datengarten) [Proposed]
 - [“Leveraging macros to reimplement language features”](/clojure-berlin-late-2018) [Proposed]
 
 ## Want me to speak?

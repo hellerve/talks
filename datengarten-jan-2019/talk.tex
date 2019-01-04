@@ -1,0 +1,178 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage{minted}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usetheme{metropolis}
+\title{Programming Languages and Trust}
+\subtitle{The what, why, and how (and the hacks)}
+\date{\today}
+\author{Veit Heller}
+\institute{Datengarten | CCCB}
+\tikzstyle{block} = [draw, fill=blue!20, rectangle,
+    minimum height=3em, minimum width=6em]
+\tikzstyle{input} = [coordinate]
+\tikzstyle{output} = [coordinate]
+\begin{document}
+  \maketitle
+  \begin{frame}{\texttt{whoami}}
+    \begin{itemize}
+      \item I work at a consultancy.
+      \item I hack on languages in my free time.
+      \item zepto, Carp, cspfuck\ldots
+      \item I’m secretly a turtle.
+    \end{itemize}
+  \end{frame}
+  \section{Compilers}
+  \begin{frame}{How do programming languages work?}
+    \begin{itemize}
+      \item We usually start with a messy dichotomy and juxtapose compilers and interpreters.
+      \begin{itemize}
+        \item Compilers transform source code into some form of executable code.
+        \item Interpreters take in source code and evaluate it directly.
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{How do programming languages really work?}
+    \begin{itemize}
+      \item Most “real” implementations transform their source code first in some way.
+      \item This representation has many names: Abstract Syntax Tree (AST), Intermediate Representation (IR), Byte Code, Bit Code, et al.
+      \item And what about transpilers? Oh my.
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{How do programming languages really work?}
+    \begin{itemize}
+      \item We have some sort of pipeline:
+      \begin{itemize}
+        \item Takes in source code,
+        \item Transforms, and
+        \item Spits out another representation or evaluates it directly.
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{A pipeline?}
+    \begin{tikzpicture}[auto, node distance=4cm,>=latex']
+        \node [input, name=input] {};
+        \node [block, right of=input] (frontend) {Frontend};
+        \node [block, right of=frontend] (backend) {Backend};
+        \node [output, right of=backend] (output) {};
+
+        \draw [draw,->] (input) -- node {Source Code} (frontend);
+        \draw [->] (frontend) -- node {IR} (backend);
+        \draw [->] (backend) -- node [name=Output] {Output}(output);
+    \end{tikzpicture}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{A pipeline?}
+    \begin{listing}[H]
+      \caption{A silly Brainfuck VM}
+      \begin{minted}[fontsize=\scriptsize]{c}
+void eval(char* str) {
+  int tape[3000];
+  int tape_head = 0;
+  while(str) {
+    switch(str) {
+      case '+': tape[tape_head]++; break;
+      case '-': tape[tape_head]--; break;
+      case '>': tape_head++; break;
+      case '<': tape_head--; break;
+      case '.': printf("%c", t[h]); break;
+      case ',': scanf("%c", (char*)&t[h]); break;
+      case '[': if(!t[h]) str = search_end_loop(str); break;
+      case ']': if(!t[h]) str = search_begin_loop(str); break;
+    }
+    ++str;
+  }
+}
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{A pipeline?}
+    \begin{figure}
+      \includegraphics[height=5.4cm]{ghc_pipeline.png}
+      \caption{The GHC pipeline.}
+    \end{figure}
+    \scriptsize This picture was sourced from https://ghc.haskell.org/trac/ghc/wiki/Commentary/Compiler/HscMain.
+  \end{frame}
+  \begin{frame}{Why pipelines?}
+    \begin{itemize}
+      \item Huge pipelines might seem overkill.
+      \item These days, they buy us modularity, clarity, and a low barrier of entry.
+      \item Independent passes are great! I can finally do proper testing!
+      \item The extreme end of this spectrum is nanopass compilers (cool stuff!).
+    \end{itemize}
+  \end{frame}
+  \section{Demo I—enter cspfuck}
+  \section{Trust}
+  \begin{frame}{Trusting Trust}
+    \begin{itemize}
+      \item In 1984, Ken Thompson was rightfully awarded the Turing Award.
+      \item He wrote a three-page paper with a scary idea: malicious compilers.
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{The idea}
+    \begin{itemize}
+      \item Have you heard about Quines? They are self-replicating programs.
+      \item Have you heard about bootstrapping compilers? They are compilers
+            that can compile themselves.
+      \item What if we compile a “buggy” version of our compiler and ship it?
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{The idea}
+    If you cannot trust your compiler, all of the programs you compile are
+    possibly malicious. It doesn’t even need to compromise existing
+    functionality.
+  \end{frame}
+  \begin{frame}{The idea}
+    “The actual bug I planted in the compiler would match code in the UNIX
+     "login" command.  The replacement code would miscompile the login
+     command so that it would accept either the intended encrypted password
+     or a particular known password. Thus if this code were installed in
+     binary and the binary were used to compile the login command, I could
+     log into that system as any user.”
+
+     \indent — Ken Thompson, Trusting Trust, page 3
+  \end{frame}
+  \begin{frame}{The idea}
+    “Such blatant code would not go undetected for long. Even the most casual
+     perusal of the source of the C compiler would raise suspicions.” 
+
+     \indent — Ken Thompson, Trusting Trust, page 3
+  \end{frame}
+  \begin{frame}{The idea}
+    “This [second approach] simply adds a second Trojan horse to the one that
+     already exists. The second pattern is aimed at the C compiler. The
+     replacement code is a Stage I self-reproducing program that inserts both
+     Trojan horses into the compiler. This requires a learning phase as in
+     the Stage II example. First we compile the modified source with the
+     normal C compiler to produce a bugged binary. We install this binary as
+     the official C. We can now remove the bugs from the source of the
+     compiler and the new binary will reinsert the bugs whenever it is
+     compiled. Of course, the login command will remain bugged with no trace
+     in source anywhere.”
+
+     \indent — Ken Thompson, Trusting Trust, page 3
+  \end{frame}
+  \section{Demo II—enter Michael Arntzenius}
+  \begin{frame}{References}
+    \begin{itemize}
+      \item A talk on Nanopass Compilers: \texttt{https://www.youtube.com/watch?v=Os7FE3J-U5Q}
+      \item Ken Thompson, Trusting Trust: \texttt{https://www.win.tue.nl/~aeb/linux/hh/thompson/trust.html}
+      \item Michael Arntzenius’ reflections on Trusting Trust: \texttt{https://github.com/rntz/rotten}
+      \item My favorite talks on Compilers and Interpreters: \texttt{https://github.com/hellerve/programming-talks\#compilersinterpreters}
+      \item Some of my favorite (and loathed) papers: \texttt{https://github.com/hellerve/ptolemy/blob/master/done.md}
+      \item These slides: \texttt{https://github.com/hellerve/talks}
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{\texttt{exit}}
+    \Huge Thank you!
+    \linebreak
+    \linebreak
+    \linebreak
+    \small Questions?
+    \linebreak
+    \linebreak
+    \tiny Slides at \texttt{https://github.com/hellerve/talks}
+  \end{frame}
+\end{document}
