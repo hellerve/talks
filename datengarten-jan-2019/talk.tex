@@ -97,10 +97,63 @@ void eval(char* str) {
   \end{frame}
   \begin{frame}{Why pipelines?}
     \begin{itemize}
-      \item Huge pipelines might seem overkill.
+      \item Huge pipelines like this might seem overkill for simple languages.
       \item These days, they buy us modularity, clarity, and a low barrier of entry.
       \item Independent passes are great! I can finally do proper testing!
       \item The extreme end of this spectrum is nanopass compilers (cool stuff!).
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{Passes Frontend—Tokenizer/Lexer/Parser}
+    \begin{itemize}
+      \item Most language implementations have a parser.
+      \item Tokenizer/Lexer splits stream up into tokens (Lex/Flex/ANTLR...).
+      \item Parser generates IR/AST from source or tokens.
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{Passes Frontend—Tokenizer/Lexer/Parser}
+    \begin{itemize}
+      \item Parsers are generally more interesting.
+      \item You can generate them (YACC/Bison/ANTLR...)—but that’s boring.
+      \item You can alse write them completely manually (recursive descent is
+            popular) or use a framework.
+      \item Personal favorites: recursive descent, GLL (Generalized
+            Left-to-Right, Leftmost derivation), OMeta, Parsec.
+      \item Rule of Thumb: Don’t overengineer it early on. It’s easy to replace.
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{Passes Frontend—Typechecking}
+    \begin{itemize}
+      \item You can have fun with types!
+      \item A simple, but powerful model is Hindley-Milner, with sum and product
+            types (think Haskell or OCaml).
+      \item It buys you a “simple” type inference algorithm for functions.
+      \item You can go wild! Dependent types, Liquid Types, and a whole bunch of
+            things I don’t understand!
+      \item You don’t need a pass for that, but even in dynamic languages
+            sometimes this makes sense because specialization leads to better
+            generated code.
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{Passes Backend—Optimizations}
+    \begin{itemize}
+      \item Heavily language-dependent!
+      \item[$\Rightarrow$] Example: Haskell is heavily optimized in a way that
+                           doesn’t make sense elsewhere—because it is lazy,
+                           reordering is extremely important. And don’t forget
+                           currying!
+      \item It’s not always higher level to lower level; more on that later.
+      \item It’s not black magic, although it often feels like it is.
+      \item If you use LLVM you already have dozens of passes available to you.
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{Passes Backend—Optimizations}
+    What does \texttt{[-]} mean in Brainfuck?
+  \end{frame}
+  \begin{frame}{Passes Backend—Optimizations}
+    It means “set the current value under the tape to zero”.
+
+    \begin{itemize}
+      \item[$\Rightarrow$] We can remove the loop entirely!
     \end{itemize}
   \end{frame}
   \section{Demo I—enter cspfuck}
@@ -108,7 +161,7 @@ void eval(char* str) {
   \begin{frame}{Trusting Trust}
     \begin{itemize}
       \item In 1984, Ken Thompson was rightfully awarded the Turing Award.
-      \item He wrote a three-page paper with a scary idea: malicious compilers.
+      \item He wrote a three-page paper on a scary idea: malicious compilers.
     \end{itemize}
   \end{frame}
   \begin{frame}{The idea}
@@ -142,27 +195,47 @@ void eval(char* str) {
   \end{frame}
   \begin{frame}{The idea}
     “This [second approach] simply adds a second Trojan horse to the one that
-     already exists. The second pattern is aimed at the C compiler. The
-     replacement code is a Stage I self-reproducing program that inserts both
-     Trojan horses into the compiler. This requires a learning phase as in
-     the Stage II example. First we compile the modified source with the
-     normal C compiler to produce a bugged binary. We install this binary as
-     the official C. We can now remove the bugs from the source of the
-     compiler and the new binary will reinsert the bugs whenever it is
-     compiled. Of course, the login command will remain bugged with no trace
-     in source anywhere.”
+     already exists. The second pattern is aimed at the C compiler. [\ldots] First
+     we compile the modified source with the normal C compiler to produce a
+     bugged binary. We install this binary as the official C. We can now remove
+     the bugs from the source of the compiler and the new binary will reinsert
+     the bugs whenever it is compiled. Of course, the login command will remain
+     bugged with no trace in source anywhere.”
 
      \indent — Ken Thompson, Trusting Trust, page 3
   \end{frame}
-  \section{Demo II—enter Michael Arntzenius}
-  \begin{frame}{References}
+  \begin{frame}{Takeaways}
     \begin{itemize}
-      \item A talk on Nanopass Compilers: \texttt{https://www.youtube.com/watch?v=Os7FE3J-U5Q}
+      \item It has historically mostly been regarded as a scary practical joke
+            by compiler engineers.
+      \item As compilers get more complex (and more modular), a malicious
+            “optimization” pass can ever more easily be inserted into the
+            compiler.
+      \item If someone pointed at an obscure piece of assembly and told you
+            that “this simple optimization buys us a 10\% speed gain on
+            auto-vectorized code in ARM”, would you just believe them?
+    \end{itemize}
+  \end{frame}
+  \section{Demo II—enter Michael Arntzenius}
+  \begin{frame}{References I}
+    \begin{itemize}
+      \item These slides: \texttt{https://github.com/hellerve/talks}
+      \item A talk on Nanopass Compilers by Andrew Keep: \texttt{https://www.youtube.com/watch?v=Os7FE3J-U5Q}
       \item Ken Thompson, Trusting Trust: \texttt{https://www.win.tue.nl/~aeb/linux/hh/thompson/trust.html}
       \item Michael Arntzenius’ reflections on Trusting Trust: \texttt{https://github.com/rntz/rotten}
-      \item My favorite talks on Compilers and Interpreters: \texttt{https://github.com/hellerve/programming-talks\#compilersinterpreters}
+      \item My favorite talks on compilers and interpreters: \texttt{https://github.com/hellerve/programming-talks\#compilersinterpreters}
       \item Some of my favorite (and loathed) papers: \texttt{https://github.com/hellerve/ptolemy/blob/master/done.md}
-      \item These slides: \texttt{https://github.com/hellerve/talks}
+      \item A list of LLVM passes: \texttt{http://llvm.org/docs/Passes.html}
+    \end{itemize}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{References II}
+    \begin{itemize}
+      \item Elizabeth Scott and Adrian Johnstone, GLL Parsing: \texttt{http://dotat.at/tmp/gll.pdf}
+      \item Daan Leijen and Erik Meijer, Parsec: Direct Style Monadic Parser Combinators for the Real World: \texttt{https://www.microsoft.com/en-us/research/publication/parsec-direct-style-monadic-parser-combinators-for-the-real-world/}
+      \item Ana Bove and Peter Dybjer, Dependent Types at Work: \texttt{http://www.cse.chalmers.se/\%7Epeterd/papers/DependentTypesAtWork.pdf}
+      \item Alessandro Warth, Experimenting with Programming Languages (The original thesis on OMeta): \texttt{www.vpri.org/pdf/tr2008003\_experimenting.pdf}
+      \item Patrick Rondon et al, Liquid Types: \texttt{http://goto.ucsd.edu/\textasciitilde rjhala/liquid/liquid\_types.pdf}
     \end{itemize}
   \end{frame}
   \begin{frame}{\texttt{exit}}
