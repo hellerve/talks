@@ -68,18 +68,19 @@
       \caption{A silly Brainfuck VM}
       \begin{minted}[fontsize=\scriptsize]{c}
 void eval(char* str) {
-  int tape[3000];
-  int tape_head = 0;
-  while(str) {
-    switch(str) {
-      case '+': tape[tape_head]++; break;
-      case '-': tape[tape_head]--; break;
-      case '>': tape_head++; break;
-      case '<': tape_head--; break;
-      case '.': printf("%c", t[h]); break;
-      case ',': scanf("%c", (char*)&t[h]); break;
-      case '[': if(!t[h]) str = search_end_loop(str); break;
-      case ']': if(!t[h]) str = search_begin_loop(str); break;
+  int tape[30000];
+  int head = 0;
+  for (int i = 0; i<30000; i++) tape[i] = 0;
+  while(*str) {
+    switch(*str) {
+      case '+': tape[head]++; break;
+      case '-': tape[head]--; break;
+      case '>': head++; break;
+      case '<': head--; break;
+      case '.': printf("%c", tape[head]); break;
+      case ',': scanf("%c", (char*)&tape[head]); break;
+      case '[': if(!tape[head]) str = search_end_loop(str); break;
+      case ']': if(tape[head]) str = search_begin_loop(str); break;
     }
     ++str;
   }
