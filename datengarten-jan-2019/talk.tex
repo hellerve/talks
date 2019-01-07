@@ -174,11 +174,6 @@ void eval(char* str) {
     \end{itemize}
   \end{frame}
   \begin{frame}{The idea}
-    If you cannot trust your compiler, all of the programs you compile are
-    possibly malicious. It doesn’t even need to compromise existing
-    functionality.
-  \end{frame}
-  \begin{frame}{The idea}
     “The actual bug I planted in the compiler would match code in the UNIX
      "login" command.  The replacement code would miscompile the login
      command so that it would accept either the intended encrypted password
@@ -186,13 +181,13 @@ void eval(char* str) {
      binary and the binary were used to compile the login command, I could
      log into that system as any user.”
 
-     \indent — Ken Thompson, Trusting Trust, page 3
+     \indent — Ken Thompson, Reflections on Trusting Trust, page 3
   \end{frame}
   \begin{frame}{The idea}
     “Such blatant code would not go undetected for long. Even the most casual
      perusal of the source of the C compiler would raise suspicions.” 
 
-     \indent — Ken Thompson, Trusting Trust, page 3
+     \indent — Ken Thompson, Reflections on Trusting Trust, page 3
   \end{frame}
   \begin{frame}{The idea}
     “This [second approach] simply adds a second Trojan horse to the one that
@@ -203,7 +198,7 @@ void eval(char* str) {
      the bugs whenever it is compiled. Of course, the login command will remain
      bugged with no trace in source anywhere.”
 
-     \indent — Ken Thompson, Trusting Trust, page 3
+     \indent — Ken Thompson, Reflections on Trusting Trust, page 3
   \end{frame}
   \begin{frame}{Takeaways}
     \begin{itemize}
@@ -215,6 +210,9 @@ void eval(char* str) {
       \item If someone pointed at an obscure piece of assembly and told you
             that “this simple optimization buys us a 10\% speed gain on
             auto-vectorized code in ARM”, would you just believe them?
+      \item Nota Bene: There is a workaround described by David A. Wheeler, but
+            it assumes that there is no non-determinism in a compiler, but there
+            often is (see, for instance, GCC’s \texttt{-fguess-branch-probability}).
     \end{itemize}
   \end{frame}
   \section{Demo II—enter Michael Arntzenius}
@@ -222,7 +220,7 @@ void eval(char* str) {
     \begin{itemize}
       \item These slides: \texttt{https://github.com/hellerve/talks}
       \item A talk on Nanopass Compilers by Andrew Keep: \texttt{https://www.youtube.com/watch?v=Os7FE3J-U5Q}
-      \item Ken Thompson, Trusting Trust: \texttt{https://www.win.tue.nl/~aeb/linux/hh/thompson/trust.html}
+      \item Ken Thompson, Reflections on Trusting Trust: \texttt{https://www.win.tue.nl/~aeb/linux/hh/thompson/trust.html}
       \item Michael Arntzenius’ reflections on Trusting Trust: \texttt{https://github.com/rntz/rotten}
       \item A blog post on how I sped up cspfuck: \texttt{https://blog.veitheller.de/Speeding\_up\_an\_Interpreter.html}
       \item My favorite talks on compilers and interpreters: \texttt{https://github.com/hellerve/programming-talks\#compilersinterpreters}
@@ -238,6 +236,7 @@ void eval(char* str) {
       \item Ana Bove and Peter Dybjer, Dependent Types at Work: \texttt{http://www.cse.chalmers.se/\%7Epeterd/papers/DependentTypesAtWork.pdf}
       \item Alessandro Warth, Experimenting with Programming Languages (The original thesis on OMeta): \texttt{www.vpri.org/pdf/tr2008003\_experimenting.pdf}
       \item Patrick Rondon et al, Liquid Types: \texttt{http://goto.ucsd.edu/\textasciitilde rjhala/liquid/liquid\_types.pdf}
+      \item David A. Wheeler, Fully Countering Trusting Trust through Diverse Double-Compiling (DDC) - Countering Trojan Horse attacks on Compilers: \texttt{https://dwheeler.com/trusting-trust/}
     \end{itemize}
   \end{frame}
   \begin{frame}{\texttt{exit}}
