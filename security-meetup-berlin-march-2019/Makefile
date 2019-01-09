@@ -7,5 +7,4 @@ all:
 	make cleanup
 
 cleanup:
-	rm ${TARGET}.aux ${TARGET}.log ${TARGET}.nav ${TARGET}.out ${TARGET}.snm ${TARGET}.toc ${TARGET}.vrb
-	rm -r _minted-talk
+	rm ${TARGET}.aux ${TARGET}.log ${TARGET}.nav ${TARGET}.out ${TARGET}.snm ${TARGET}.toc

@@ -26,7 +26,7 @@
       \item Have you heard about Quines? They are self-replicating programs.
       \item Have you heard about bootstrapping compilers? They are compilers
             that can compile themselves.
-      \item What if we compile a “buggy” version of our compiler and ship it?
+      \item What if we compile a “bugged” version of our compiler and ship it?
     \end{itemize}
   \end{frame}
   \begin{frame}{The idea}
@@ -73,9 +73,19 @@
     assumes that there is no non-determinism in a compiler, but there often is
     (see, for instance, GCC’s \texttt{-fguess-branch-probability}).
 
-    Your best bet is probably reproducible builds.
+    $\Rightarrow$ Your best bet is probably reproducible builds.
   \end{frame}
   \section{Demo—enter Michael Arntzenius}
+  \begin{frame}{Conclusio}
+    \begin{itemize}
+      \item Maybe this attack is not part of your thread model, and that’s
+            alright.
+      \item What comes back to bite you is your “unknown unknowns”—things you
+            don’t know that you don’t know.
+      \item Informed decisions are probably the most important puzzle piece in
+            creating a more secure world.
+    \end{itemize}
+  \end{frame}
   \begin{frame}{References I}
     \begin{itemize}
       \item These slides: \texttt{https://github.com/hellerve/talks}
