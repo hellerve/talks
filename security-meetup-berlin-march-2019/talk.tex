@@ -1,0 +1,97 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{metropolis}
+\title{Programming Languages and Trust}
+\date{\today}
+\author{Veit Heller}
+\institute{Datengarten | CCCB}
+\begin{document}
+  \maketitle
+  \begin{frame}{\texttt{whoami}}
+    \begin{itemize}
+      \item I work at a consultancy.
+      \item I hack on languages in my free time.
+      \item zepto, Carp, cspfuck\ldots
+      \item I’m secretly a turtle.
+    \end{itemize}
+  \end{frame}
+  \section{Trust}
+  \begin{frame}{Trusting Trust}
+    \begin{itemize}
+      \item In 1984, Ken Thompson was rightfully awarded the Turing Award.
+      \item He wrote a three-page paper on a scary idea: malicious compilers.
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{The idea}
+    \begin{itemize}
+      \item Have you heard about Quines? They are self-replicating programs.
+      \item Have you heard about bootstrapping compilers? They are compilers
+            that can compile themselves.
+      \item What if we compile a “buggy” version of our compiler and ship it?
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{The idea}
+    “The actual bug I planted in the compiler would match code in the UNIX
+     "login" command.  The replacement code would miscompile the login
+     command so that it would accept either the intended encrypted password
+     or a particular known password. Thus if this code were installed in
+     binary and the binary were used to compile the login command, I could
+     log into that system as any user.”
+
+     \indent — Ken Thompson, Reflections on Trusting Trust, page 3
+  \end{frame}
+  \begin{frame}{The idea}
+    “Such blatant code would not go undetected for long. Even the most casual
+     perusal of the source of the C compiler would raise suspicions.” 
+
+     \indent — Ken Thompson, Reflections on Trusting Trust, page 3
+  \end{frame}
+  \begin{frame}{The idea}
+    “This [second approach] simply adds a second Trojan horse to the one that
+     already exists. The second pattern is aimed at the C compiler. [\ldots] First
+     we compile the modified source with the normal C compiler to produce a
+     bugged binary. We install this binary as the official C. We can now remove
+     the bugs from the source of the compiler and the new binary will reinsert
+     the bugs whenever it is compiled. Of course, the login command will remain
+     bugged with no trace in source anywhere.”
+
+     \indent — Ken Thompson, Reflections on Trusting Trust, page 3
+  \end{frame}
+  \begin{frame}{Takeaways}
+    \begin{itemize}
+      \item It has historically mostly been regarded as a scary practical joke
+            by compiler engineers.
+      \item As compilers get more complex (and more modular), a malicious
+            “optimization” pass can ever more easily be inserted into the
+            compiler.
+      \item If someone pointed at an obscure piece of assembly and told you
+            that “this simple optimization buys us a 10\% speed gain on
+            auto-vectorized code in ARM”, would you just believe them?
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{Caveat}
+    Nota Bene: There is a workaround described by David A. Wheeler, but it
+    assumes that there is no non-determinism in a compiler, but there often is
+    (see, for instance, GCC’s \texttt{-fguess-branch-probability}).
+
+    Your best bet is probably reproducible builds.
+  \end{frame}
+  \section{Demo—enter Michael Arntzenius}
+  \begin{frame}{References I}
+    \begin{itemize}
+      \item These slides: \texttt{https://github.com/hellerve/talks}
+      \item Ken Thompson, Reflections on Trusting Trust: \texttt{https://www.win.tue.nl/~aeb/linux/hh/thompson/trust.html}
+      \item Michael Arntzenius’ reflections on Trusting Trust: \texttt{https://github.com/rntz/rotten}
+      \item David A. Wheeler, Fully Countering Trusting Trust through Diverse Double-Compiling (DDC) - Countering Trojan Horse attacks on Compilers: \texttt{https://dwheeler.com/trusting-trust/}
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{\texttt{exit}}
+    \Huge Thank you!
+    \linebreak
+    \linebreak
+    \linebreak
+    \small Questions?
+    \linebreak
+    \linebreak
+    \tiny Slides at \texttt{https://github.com/hellerve/talks}
+  \end{frame}
+\end{document}
