@@ -3,7 +3,7 @@
 \title{Programming Languages and Trust}
 \date{\today}
 \author{Veit Heller}
-\institute{Datengarten | CCCB}
+\institute{Internet Security Meetup Berlin}
 \begin{document}
   \maketitle
   \begin{frame}{\texttt{whoami}}
@@ -31,7 +31,7 @@
   \end{frame}
   \begin{frame}{The idea}
     “The actual bug I planted in the compiler would match code in the UNIX
-     "login" command.  The replacement code would miscompile the login
+     “login” command.  The replacement code would miscompile the login
      command so that it would accept either the intended encrypted password
      or a particular known password. Thus if this code were installed in
      binary and the binary were used to compile the login command, I could
@@ -56,7 +56,7 @@
 
      \indent — Ken Thompson, Reflections on Trusting Trust, page 3
   \end{frame}
-  \begin{frame}{Takeaways}
+  \begin{frame}{Discussion}
     \begin{itemize}
       \item It has historically mostly been regarded as a scary practical joke
             by compiler engineers.
@@ -75,10 +75,33 @@
 
     $\Rightarrow$ Your best bet is probably reproducible builds.
   \end{frame}
-  \section{Demo—enter Michael Arntzenius}
+  \begin{frame}{Enter Michael Arntzenius}
+    Aside: if you want to play with this, Michael Arntzenius has a great project
+    on Github with an exceptional README that guides you through the process of
+    compiling a malicious compiler called rotten.
+  \end{frame}
+  \begin{frame}{XCodeGhost}
+    \begin{itemize}
+      \item In 2015, a ghost haunted Mac users in China.
+      \item Security engineers discovered the root cause and gave it a snappy
+            name, as is usual nowadays.
+      \item It was dubbed XCodeGhost.
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{XCodeGhost}
+    \begin{itemize}
+      \item Downloading XCode from China is slow.
+      \item There was a mirror in China that was faster.
+      \item It was owned by malicious actors.
+      \item They inserted malicious code in the core frameworks compiled into
+            every app built using XCode (most notably device and display
+            classes).
+      \item Super scary, and only half of the exploit.
+    \end{itemize}
+  \end{frame}
   \begin{frame}{Conclusio}
     \begin{itemize}
-      \item Maybe this attack is not part of your thread model, and that’s
+      \item Maybe this attack is not part of your threat model, and that’s
             alright.
       \item What comes back to bite you is your “unknown unknowns”—things you
             don’t know that you don’t know.
@@ -86,12 +109,14 @@
             creating a more secure world.
     \end{itemize}
   \end{frame}
-  \begin{frame}{References I}
+  \begin{frame}{References}
     \begin{itemize}
       \item These slides: \texttt{https://github.com/hellerve/talks}
+      \item This talk, but longer, and at Datengarten: \texttt{https://api.media.ccc.de/v/dg-96}
       \item Ken Thompson, Reflections on Trusting Trust: \texttt{https://www.win.tue.nl/~aeb/linux/hh/thompson/trust.html}
       \item Michael Arntzenius’ reflections on Trusting Trust: \texttt{https://github.com/rntz/rotten}
-      \item David A. Wheeler, Fully Countering Trusting Trust through Diverse Double-Compiling (DDC) - Countering Trojan Horse attacks on Compilers: \texttt{https://dwheeler.com/trusting-trust/}
+      \item David A. Wheeler, Fully Countering Trusting Trust through Diverse Double-Compiling (DDC)—Countering Trojan Horse attacks on Compilers: \texttt{https://dwheeler.com/trusting-trust/}
+      \item FireEye on XCodeGhost: \texttt{https://www.fireeye.com/blog/threat-research/2015/11/xcodeghost\_s\_a\_new.html}
     \end{itemize}
   \end{frame}
   \begin{frame}{\texttt{exit}}

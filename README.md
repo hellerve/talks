@@ -14,7 +14,7 @@ Right now, the talks I’ve given/proposed are these:
 - [A talk](https://github.com/hellerve/release-party) I’ve given at the release
   party of [zepto](https://github.com/zepto-lang/zepto), a Lisp of my own making
 - [“Programming Languages and Trust” at Datengarten 96](https://api.media.ccc.de/v/dg-96)
-- [“Programming Languages and Trust” (short version) at the Information Security Meetup Berlin](/security-meetup-berlin-march-2019) [Proposed]
+- [“Programming Languages and Trust” (short version) at the Information Security Meetup Berlin](/security-meetup-berlin-march-2019)
 - [“Leveraging macros to reimplement language features”](/clojure-berlin-late-2018) [Proposed]
 
 ## Want me to speak?
