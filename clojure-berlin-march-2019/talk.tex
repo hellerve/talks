@@ -1,0 +1,176 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage{minted}
+\usepackage{listings}
+\usetheme{metropolis}
+\title{Leveraging macros to reimplement language features}
+\date{\today}
+\author{Veit Heller}
+\institute{Clojure Meetup Berlin}
+\begin{document}
+  \maketitle
+  \begin{frame}{Agenda}
+    \begin{itemize}
+      \item Comments
+      \item Conditionals
+      \item Lists
+      \item Local bindings
+    \end{itemize}
+  \end{frame}
+  \section{Comments}
+  \begin{frame}[fragile]
+    \frametitle{Comments}
+    \begin{listing}[H]
+      \caption{Implementing comments}
+      \begin{minted}{clojure}
+(defmacro mcomment [& args] nil)
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Comments}
+    \begin{listing}[H]
+      \caption{Using comments}
+      \begin{minted}{clojure}
+(mcomment
+  (+ 40 3)
+  (undefined-function)
+  (println "nope"))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \section{Conditionals}
+  \begin{frame}[fragile]
+    \frametitle{if}
+    \begin{listing}[H]
+      \caption{Booleans as functions}
+      \begin{minted}{clojure}
+(defn mtrue [x y] (x))
+(defn mfalse [x y] (y))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{if}
+    \begin{listing}[H]
+      \caption{\texttt{if} as a macro}
+      \begin{minted}{clojure}
+(defn mtrue [x y] (x))
+(defn mfalse [x y] (y))
+
+(defmacro mif [cnd then else] `(~cnd #(~then) #(~else)))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{if}
+    \begin{listing}[H]
+      \caption{Using \texttt{if}, the macro}
+      \begin{minted}{clojure}
+(mif mfalse
+  (println "nope")
+  (println "yup"))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{cond}
+    \begin{listing}[H]
+      \caption{\texttt{cond} as a macro}
+      \begin{minted}{clojure}
+(defmacro mcond [& args]
+  (when args
+    `(if ~(first args)
+       ~(second args)
+       ~(cons 'mcond (rest (rest args))))))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{cond}
+    \begin{listing}[H]
+      \caption{Using \texttt{cond}, the macro}
+      \begin{minted}{clojure}
+(mcond
+  (= 1 2) (println "no")
+  (= 2 3) (println "still no")
+  true (println "yup"))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \section{Lists}
+  \begin{frame}[fragile]
+    \frametitle{cons, car, cdr}
+    \begin{listing}[H]
+      \caption{\texttt{cons}, \texttt{car}, and \texttt{cdr} as macros}
+      \begin{minted}{clojure}
+TODO
+(defmacro mcons [h t] #(if % h t))
+(defn mcar [l] (l true))
+(defn mcdr [l] (l false))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{cons, car, cdr}
+    \begin{listing}[H]
+      \caption{Using \texttt{cons}, \texttt{car}, and \texttt{cdr}, the macros}
+      \begin{minted}{clojure}
+(println (mcar (mcdr (mcons 1 (mcons 2 3)))))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{list}
+    \begin{listing}[H]
+      \caption{Reimplementing \texttt{list}}
+      \begin{minted}{clojure}
+(defn mlist [& args]
+  (loop [res nil, args args]
+    (if (empty? args)
+      res
+      (recur (mcons (first args) res) (rest args)))))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \section{Local bindings}
+  \begin{frame}[fragile]
+    \frametitle{let}
+    \begin{listing}[H]
+      \caption{Reimplementing \texttt{let}}
+      \begin{minted}{clojure}
+(defmacro mlet [args body]
+  (if (= (count args) 2)
+    `((fn [~(first args)] ~body) ~(second args))
+    `((fn [~(first args)]
+        (mlet ~(rest (rest args)) ~body))
+      ~(second args))))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{let}
+    \begin{listing}[H]
+      \caption{Using \texttt{let}}
+      \begin{minted}{clojure}
+(println (mlet [x 1 y 2] (+ x y)))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}{References}
+    \begin{itemize}
+      \item “Reversing the technical interview” uses the lists for great effect: \texttt{https://aphyr.com/posts/340-reversing-the-technical-interview}
+      \item These slides: \texttt{https://github.com/hellerve/talks}
+      \item A series of blog posts on Scheme macros: \texttt{https://blog.veitheller.de/scheme-macros}
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{The End}
+    \Huge Thank you!
+    \linebreak
+    \linebreak
+    \linebreak
+    \small Questions?
+    \linebreak
+    \linebreak
+    \tiny Slides at \texttt{https://github.com/hellerve/talks}
+  \end{frame}
+\end{document}
