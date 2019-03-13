@@ -17,7 +17,7 @@
     \end{itemize}
   \end{frame}
   \begin{frame}{Agenda}
-    Shameless plug: agenda of my series of blog post on Scheme macros!
+    Shameless plug: agenda of my series of blog posts on Scheme macros!
     \begin{itemize}
       \item Modules
       \item Generic functions
@@ -68,7 +68,7 @@
 (defn mtrue [x y] (x))
 (defn mfalse [x y] (y))
 
-(defmacro mif [cnd then else] `(~cnd #(~then) #(~else)))
+(defmacro mif [cnd then else] `(~cnd #(do ~then) #(do ~else)))
       \end{minted}
     \end{listing}
   \end{frame}
@@ -112,10 +112,9 @@
   \begin{frame}[fragile]
     \frametitle{cons, car, cdr}
     \begin{listing}[H]
-      \caption{\texttt{cons}, \texttt{car}, and \texttt{cdr} as macros}
+      \caption{\texttt{cons}, \texttt{car}, and \texttt{cdr} as functions}
       \begin{minted}{clojure}
-TODO
-(defmacro mcons [h t] #(if % h t))
+(defn mcons [h t] #(if % h t))
 (defn mcar [l] (l true))
 (defn mcdr [l] (l false))
       \end{minted}
@@ -139,7 +138,16 @@ TODO
   (loop [res nil, args args]
     (if (empty? args)
       res
-      (recur (mcons (first args) res) (rest args)))))
+      (recur (mcons (last args) res) (butlast args)))))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{cons, car, cdr}
+    \begin{listing}[H]
+      \caption{\texttt{mquoted}}
+      \begin{minted}{clojure}
+(defmacro mquoted [& args] `(apply mlist '~args))
       \end{minted}
     \end{listing}
   \end{frame}

@@ -6,7 +6,7 @@
 
 (defn mtrue [x y] (x))
 (defn mfalse [x y] (y))
-(defmacro mif [cnd then else] `(~cnd #(~then) #(~else)))
+(defmacro mif [cnd then else] `(~cnd #(do ~then) #(do ~else)))
 (mif mfalse
   (println "nope")
   (println "yup"))
@@ -28,8 +28,11 @@
   (loop [res nil, args args]
     (if (empty? args)
       res
-      (recur (mcons (first args) res) (rest args)))))
+      (recur (mcons (last args) res) (butlast args)))))
 (println (mcar (mcdr (mlist 1 2 3))))
+
+(defmacro mquoted [& args] `(apply mlist '~args))
+(println (mcar (mquoted x)))
 
 (defmacro mlet [args body]
   (if (= (count args) 2)
