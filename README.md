@@ -16,6 +16,7 @@ Right now, the talks I’ve given/proposed are these:
 - [“Programming Languages and Trust” at Datengarten 96](https://api.media.ccc.de/v/dg-96)
 - [“Programming Languages and Trust” (short version) at the Information Security Meetup Berlin](/security-meetup-berlin-march-2019)
 - [“Leveraging macros to reimplement language features”](/clojure-berlin-march-2019)
+- [“Abstractions! How do I even?” at EnthusiastiCon 2019](/enthusiasticon-2019)
 
 ## Want me to speak?
 
