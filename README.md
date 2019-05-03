@@ -17,6 +17,7 @@ Right now, the talks I’ve given/proposed are these:
 - [“Programming Languages and Trust” (short version) at the Information Security Meetup Berlin](/security-meetup-berlin-march-2019)
 - [“Leveraging macros to reimplement language features”](/clojure-berlin-march-2019)
 - [“Abstractions! How do I even?” at EnthusiastiCon 2019](/enthusiasticon-2019)
+- [“Types—A Hitchhiker’s Guide” at clojuTRE 2019](/clojutre-2019) (Proposed)
 
 ## Want me to speak?
 
@@ -27,6 +28,7 @@ to know what I’m interested in talking about first. A non-exhaustive list:
 - [Generative Art](https://veitheller.de/art/)
 - [Abstractions](https://blog.veitheller.de/Abstractions.html)
 - [How you can leverage macros to implement language features](https://blog.veitheller.de/scheme-macros/)
+- [Types](/clojutre-2019)
 
 If you find any of these interesting or think you might have a different topic
 for me, [feel free to reach out](mailto:veit@veitheller.de)!
