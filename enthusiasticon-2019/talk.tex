@@ -16,9 +16,9 @@
   \end{frame}
   \section{Motivation!}
   \begin{frame}{Technophilosophy?}
-    We’re going to talk a lot about philosophy in this talk. None of it will be
-    about the branches of philosophy that seem most notably intertwined with
-    our profession: technophilosophy.
+    We’re going to talk a lot about philosophy. None of it will be about the
+    branches of philosophy that seem most notably intertwined with our
+    profession: technophilosophy.
   \end{frame}
   \begin{frame}{Abstractions}
     We build abstractions, always.
@@ -31,7 +31,7 @@
     technology is abstracting things.
   \end{frame}
   \begin{frame}{But I don’t have a PhD!}
-    Me neither, and English isn’t my first language either.
+    Me neither, and English isn’t my first language.
 
     The beauty about a lot of philosophy is that it is very simple, because it
     deals with very simple things—but not easy things!
@@ -40,6 +40,14 @@
     Because you work on them all day! And because it’s fun!
   \end{frame}
   \section{Michel Foucault—The Order of Things}
+  \begin{frame}{Disclaimer}
+    This book is not about abstractions, but about “episteme”, which are roughly
+    the fundamental ideological axioms of all of knowledge—think paradigms, but
+    without knowing that you adhere to them. This doesn’t make any sense
+    without context, and the talk isn’t really about it anyway.
+
+    What it is about is how to impose order through abstraction.
+  \end{frame}
   \begin{frame}{Jorge Luis Borges}
     “[\ldots] animals are divided into: (a) belonging to the Emperor, (b)
     embalmed, (c) tame, (d) sucking pigs, (e) sirens, (f) fabulous, (g) stray
@@ -51,7 +59,7 @@
     — Michel Foucault, citing Jorge Luis Borges, in “The Order of Things”
   \end{frame}
   \begin{frame}{Order}
-    It is often better to have no system to have the wrong system.
+    It is often better to have no system than to have the wrong system.
   \end{frame}
   \begin{frame}{Order}
     Classifications are defined by the space between them, not by their label.
@@ -59,14 +67,14 @@
   \begin{frame}{Order}
     Order is statist: you have to impose rules, and all of them are arbitrary.
   \end{frame}
-  \begin{frame}{What makes order good? What makes it bad?}
+  \begin{frame}{What makes abstractions good? What makes them bad?}
     Good abstractions impose a sensible order. The space between concepts is
     well defined.
   \end{frame}
   \begin{frame}{Why order?}
     If the order is intuitive, the abstraction will be intuitive as well.
   \end{frame}
-  \begin{frame}{Why abstractions?}
+  \begin{frame}{Abstractions and Order}
     A good abstraction is good because it imposes order. Good order is good
     because it provides abstraction.
 
@@ -74,20 +82,69 @@
     operates: always classifying, putting in boxes, hiding details.
   \end{frame}
   \section{Robert M. Pirsig—Zen and the Art of Motorcycle Maintenance}
-  \begin{frame}{Splitting and reassembling things}
+  \begin{frame}{Disclaimer}
+    This book is good, and reading it is very addicting!
+
+    It’s about a father-son motorcycle trip, a life changed by mental illness,
+    and the nature of “Quality”.
   \end{frame}
-  \begin{frame}{Lateral and literal thinking}
+  \begin{frame}{The Three Things}
+    There are three things in all dialogues: the subject, the object, and
+    “Quality”, which happens between the two.
+
+    Quality is always between the observer and the observed.
+  \end{frame}
+  \begin{frame}{Splitting and Reassembling}
+    All things can be split into smaller compontents, walnuts and protons alike.
+
+    You have to know whether you’re dealing with walnuts or with protons to find
+    the scale of your solution.
   \end{frame}
   \begin{frame}{Do abstractions have to hide their details?}
+    If everything is made up of components, should we hide the joints and welds
+    in our structures from the user?
+
+    The common answer is “yes”, abstractions abstract.
   \end{frame}
   \begin{frame}{The curious case of Git}
+    Git is the ultimate leaky abstraction.
+  \end{frame}
+  \begin{frame}{The curious case of Git}
+    It gives you control over the “porcelain”, or user-facing facilities, but
+    also over the “plumbing”, and it does so gracefully.
+
+    I can \texttt{git commit}, but I can just as well \texttt{git commit-tree
+    <tree> -p <parent-commit>}.
+  \end{frame}
+  \begin{frame}{Do abstractions have to hide their details?}
+    The real answer is “not if you do it well”, which translates to “probably
+    yes”.
   \end{frame}
   \section{Summary!}
-  \begin{frame}{Why should I care, revisited}
+  \begin{frame}{Why do I have to think about these things?}
+    Thinking about how to write abstractions will make you reflect about your
+    personal æsthetics—like whether you want to use the pretentious “æ” or
+    not—and whether what you build actually holds up to your standards.
+  \end{frame}
+  \begin{frame}{Why do I have to think about these things?}
+    Reading philosophy will inspire you, or at least build a vocabulary that
+    heps you articulate your æsthetics, pretentious or not.
   \end{frame}
   \begin{frame}{Techniques for writing better abstractions, summarized}
+    A personal guidebook.
+    \begin{itemize}
+      \item Don’t fear taking a hard stance if it leads to better order and the
+            right abstractions. But be gentle to other people if they disagree.
+      \item Have a clear classification system. There should be no overlap
+            between different function sets in your API. Remember: it’s about
+            clear boundaries.
+      \item If the order is intuitive, the abstraction will be intuitive as
+            well. But please write documentation anyway.
+      \item If you’re unsure about anything, talk to someone else. Bee tee
+            dubbs: I’m always happy to chat about these things.
+    \end{itemize}
   \end{frame}
-  \begin{frame}{A Commentated Reading List}
+  \begin{frame}{A Commentated Reading List I}
     \begin{itemize}
       \item Michel Foucault—The Order of Things: not about abstractions per se,
             but nonetheless exciting!
@@ -105,12 +162,18 @@
             removed enough from technology to be generally useful.
     \end{itemize}
   \end{frame}
+  \begin{frame}
+    \begin{itemize}
+      \item Douglas R. Hofstaedter—Gödel, Escher, Bach: An Eternal Golden Braid:
+            a weird and beautiful voyage into meaning, self-reference, and
+            recursion.
+      \item The Git Book, Chapter 10.1—Git Internals - Plumbing and Porcelain:
+            is the start of a journey into weird Git internals that somehow ends
+            up being extremely empowering and beautiful.
+    \end{itemize}
+  \end{frame}
   \begin{frame}{The End}
     \Huge Thank you!
-    \linebreak
-    \linebreak
-    \linebreak
-    \small Questions?
     \linebreak
     \linebreak
     \tiny Slides at \texttt{https://github.com/hellerve/talks}
