@@ -58,28 +58,16 @@
 
     — Michel Foucault, citing Jorge Luis Borges, in “The Order of Things”
   \end{frame}
-  \begin{frame}{Order}
-    It is often better to have no system than to have the wrong system.
-  \end{frame}
-  \begin{frame}{Order}
+  \begin{frame}{Classifications}
     Classifications are defined by the space between them, not by their label.
   \end{frame}
-  \begin{frame}{Order}
-    Order is statist: you have to impose rules, and all of them are arbitrary.
+  \begin{frame}{Why classifications?}
+    If the classifications are intuitive, the abstraction will be intuitive as
+    well.
   \end{frame}
-  \begin{frame}{What makes abstractions good? What makes them bad?}
-    Good abstractions impose a sensible order. The space between concepts is
-    well defined.
-  \end{frame}
-  \begin{frame}{Why order?}
-    If the order is intuitive, the abstraction will be intuitive as well.
-  \end{frame}
-  \begin{frame}{Abstractions and Order}
-    A good abstraction is good because it imposes order. Good order is good
-    because it provides abstraction.
-
-    This is a tautology, but it makes sense because this is how the mind
-    operates: always classifying, putting in boxes, hiding details.
+  \begin{frame}{Why classification?}
+    Side note: it’s impossible to abstract without classifying, because
+    abstractions always add things or leave them out.
   \end{frame}
   \section{Robert M. Pirsig—Zen and the Art of Motorcycle Maintenance}
   \begin{frame}{Disclaimer}
@@ -91,20 +79,15 @@
   \begin{frame}{The Three Things}
     There are three things in all dialogues: the subject, the object, and
     “Quality”, which happens between the two.
-
+  \end{frame}
+  \begin{frame}{The Three Things}
     Quality is always between the observer and the observed.
   \end{frame}
-  \begin{frame}{Splitting and Reassembling}
-    All things can be split into smaller compontents, walnuts and protons alike.
-
-    You have to know whether you’re dealing with walnuts or with protons to find
-    the scale of your solution.
+  \begin{frame}{The Three Things}
+    Abstractions are always subjective. There is always a use case.
   \end{frame}
-  \begin{frame}{Do abstractions have to hide their details?}
-    If everything is made up of components, should we hide the joints and welds
-    in our structures from the user?
-
-    The common answer is “yes”, abstractions abstract.
+  \begin{frame}{Objectivity in a subjective world}
+    If everything is subjective, how do we empower opinionated users?
   \end{frame}
   \begin{frame}{The curious case of Git}
     Git is the ultimate leaky abstraction.
@@ -113,31 +96,32 @@
     It gives you control over the “porcelain”, or user-facing facilities, but
     also over the “plumbing”, and it does so gracefully.
 
-    I can \texttt{git commit}, but I can just as well \texttt{git commit-tree
-    <tree> -p <parent-commit>}.
+    \small{%
+      I can \texttt{git commit}, but I can just as well \texttt{git commit-tree
+      <tree> -p <parent-commit>}.
+    }
   \end{frame}
   \begin{frame}{Do abstractions have to hide their details?}
-    The real answer is “not if you do it well”, which translates to “probably
-    yes”.
+    Only if you consider your abstractions to be good enough for everyone.
   \end{frame}
   \section{Summary!}
   \begin{frame}{Why do I have to think about these things?}
     Thinking about how to write abstractions will make you reflect about your
-    personal æsthetics—like whether you want to use the pretentious “æ” or
-    not—and whether what you build actually holds up to your standards.
+    personal æsthetics and whether what you build actually holds up to your
+    standards.
   \end{frame}
   \begin{frame}{Why do I have to think about these things?}
     Reading philosophy will inspire you, or at least build a vocabulary that
-    heps you articulate your æsthetics, pretentious or not.
+    heps you articulate your æsthetics.
   \end{frame}
   \begin{frame}{Techniques for writing better abstractions, summarized}
     A personal guidebook.
     \begin{itemize}
-      \item Don’t fear taking a hard stance if it leads to better order and the
-            right abstractions. But be gentle to other people if they disagree.
-      \item Have a clear classification system. There should be no overlap
-            between different function sets in your API. Remember: it’s about
-            clear boundaries.
+      \item Don’t fear taking a hard stance if it leads to better
+            classifications and the right abstractions. But be gentle to
+            other people if they disagree.
+      \item There should be no overlap between different function sets in
+            your API. Remember: it’s about clear boundaries.
       \item If the order is intuitive, the abstraction will be intuitive as
             well. But please write documentation anyway.
       \item If you’re unsure about anything, talk to someone else. Bee tee
