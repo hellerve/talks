@@ -4,6 +4,17 @@
 \date{\today}
 \author{Veit Heller}
 \institute{EnthusiastiCon 2019}
+\setbeamertemplate{section page}
+{
+    \begingroup
+    \usebeamerfont{section title}\insertsection\par
+    \endgroup
+}
+\AtBeginSection[]{%
+  \begin{frame}[plain]
+    \usebeamertemplate{section page}
+  \end{frame}
+}
 \begin{document}
   \maketitle
   \begin{frame}{Agenda}
