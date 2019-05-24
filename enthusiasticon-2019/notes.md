@@ -94,7 +94,8 @@ So the question we have to ask ourselves then is: how do bring objectivity
 back, or at least accomodate users with a different set of ideas? And at this
 point I want to bring up the only technical thing in this talk: Git.
 
-Git is the ultimate leaky abstraction.
+Git is the ultimate leaky abstraction. I mean that in a very positive way, and
+I’ll explain how by example.
 
 What I mean by that is that in Git you have both control over what they call
 the porcelain, which is all the high-level functionality that Git exposes, and
