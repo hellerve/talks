@@ -18,6 +18,7 @@ Right now, the talks I’ve given/proposed are these:
 - [“Leveraging macros to reimplement language features”](/clojure-berlin-march-2019)
 - [“Abstractions! How do I even?” at EnthusiastiCon 2019](/enthusiasticon-2019)
 - [“Types—A Hitchhiker’s Guide” at clojuTRE 2019](/clojutre-2019) (Proposed)
+- [“Automate yourself within six months” at Neutral Interconnect Days 2019](/neutral-interconnect-days-2019)
 
 ## Want me to speak?
 
