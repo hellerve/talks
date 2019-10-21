@@ -19,6 +19,8 @@ Right now, the talks I’ve given/proposed are these:
 - [“Abstractions! How do I even?” at EnthusiastiCon 2019](/enthusiasticon-2019)
 - [“Types—A Hitchhiker’s Guide” at clojuTRE 2019](/clojutre-2019) (Proposed)
 - [“Automate yourself within six months” at Neutral Interconnect Days 2019](/neutral-interconnect-days-2019)
+  - The same talk (but a bit more technical) was also given at [NetUse AG](https://www.netuse.de/)
+    and is going to happen again at [DENOG 11](https://www.denog.de/de/meetings/denog11/).
 
 ## Want me to speak?
 
