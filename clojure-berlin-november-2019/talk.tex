@@ -1,0 +1,46 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage{minted}
+\usepackage{listings}
+\usetheme{veit}
+\title{Enhancing Your Libraries’ Security and Performance through Macros}
+\date{\today}
+\author{Veit Heller}
+\institute{Clojure Meetup Berlin}
+\begin{document}
+  \maketitle
+  \begin{frame}[fragile]
+    \frametitle{fmt}
+    \begin{listing}[H]
+      \caption{A safer format}
+      \begin{minted}{clojure}
+(defmacro fmt [s & args]
+  (let [a (dec (count (filter #(not= "" %)
+                              (str/split s #"%"))))
+        b (count args)]
+    (if (= a b)
+      `(apply format ~s '~args)
+      (exc "arguments to format don’t match (expected " a
+           ", got " b ")"))))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}{References}
+    \begin{itemize}
+      \item Doug Hoyte: Let Over Lambda
+      \item Colin Jones: Mastering Clojure Macros
+      \item Paul Graham: On Lisp (take with a grain of salt)
+      \item These slides: \texttt{https://github.com/hellerve/talks}
+      \item A series of blog posts on Scheme macros: \texttt{https://blog.veitheller.de/scheme-macros}
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{The End}
+    \Huge Thank you!
+    \linebreak
+    \linebreak
+    \linebreak
+    \small Questions?
+    \linebreak
+    \linebreak
+    \tiny Slides at \texttt{https://github.com/hellerve/talks}
+  \end{frame}
+\end{document}
