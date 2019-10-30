@@ -8,6 +8,12 @@
 \institute{Clojure Meetup Berlin}
 \begin{document}
   \maketitle
+  \begin{frame}{TL;DR}
+    \Large “Just remember that macro programming is not about style; it is about
+    power.”
+
+    — Doug Hoyte, Let Over Lambda (Chapter 3)
+  \end{frame}
   \begin{frame}[fragile]
     \frametitle{fmt}
     \begin{listing}[H]
@@ -24,11 +30,27 @@
       \end{minted}
     \end{listing}
   \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{defmacro!}
+    \begin{listing}[H]
+      \caption{A macro utility—or, as Alan Perlin said: “Syntactic sugar causes cancer of the semicolon.”}
+      \begin{minted}{clojure}
+(defmacro defmacro! [name args & body]
+  (let [rm (into {}
+                (map (fn [s] [s `(quote ~(gensym))])
+                        args))]
+    `(defmacro ~name ~args
+      `(let ~~(into [] (mapcat reverse rm))
+        ~(clojure.walk/postwalk-replace ~rm ~@body)))))
+      \end{minted}
+    \end{listing}
+  \end{frame}
   \begin{frame}{References}
     \begin{itemize}
+      \item Greg Hendershott: Fear of Macros
       \item Doug Hoyte: Let Over Lambda
       \item Colin Jones: Mastering Clojure Macros
-      \item Paul Graham: On Lisp (take with a grain of salt)
+      \item Paul Graham: On Lisp
       \item These slides: \texttt{https://github.com/hellerve/talks}
       \item A series of blog posts on Scheme macros: \texttt{https://blog.veitheller.de/scheme-macros}
     \end{itemize}
