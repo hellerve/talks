@@ -14,6 +14,23 @@
 
     — Doug Hoyte, Let Over Lambda (Chapter 3)
   \end{frame}
+  \begin{frame}{TL;DR, but really}
+    \Large Power has to be yielded or wielded in favor of others, not yourself.
+  \end{frame}
+  \begin{frame}{Why not macros?}
+    \Large Macros cause problems as often as they solve them.
+
+    \Large They can be impenetrable, infectuous, and stylistically oppressive.
+  \end{frame}
+  \begin{frame}{Really?}
+    \Large You’re framing it wrong.
+  \end{frame}
+  \begin{frame}{reframe}
+    \Large Don’t use macros to extend your syntactic and expressive power.
+  \end{frame}
+  \begin{frame}{Commandments I}
+    \Large First, use them to make it harder to make mistakes.
+  \end{frame}
   \begin{frame}[fragile]
     \frametitle{fmt}
     \begin{listing}[H]
@@ -29,6 +46,54 @@
            ", got " b ")"))))
       \end{minted}
     \end{listing}
+  \end{frame}
+  \begin{frame}{Commandments II}
+    \Large Then, use them to say what you mean.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{sine}
+    \begin{listing}[H]
+      \caption{A sine lookup table.}
+      \begin{minted}{c}
+const float sine_lut[LUT_SIN_SIZE + 1]={
+  1, 0.999981175282601, 0.999924701839146, 0.999830581795823,
+  0.999698818696204, 0.999529417501093, 0.99932238458835,
+  0.999077727752645, 0.998795456205172, 0.998475580573295,
+  // 1013 more constants[...]
+  1.0
+};
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{sine}
+    \begin{listing}[H]
+      \caption{A sine lookup table, builder.}
+      \begin{minted}{c}
+// build with:
+// for(i=0; i<LUT_SIN_SIZE; i++){
+//   sine_lut[i] = sin(2PI * i / LUT_SIN_SIZE);
+// } sine_lut[LUT_SIN_SIZE] = 0.0;
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{sine}
+    \begin{listing}[H]
+      \caption{A sine lookup table, computed.}
+      \begin{minted}{clojure}
+(defmacro build-sine [sym size &{ :keys [start] 
+                                  :or {start 0}}]
+  `(def ~sym
+    ~(vec (map #(Math/sin (/ (* % (* 2 Math/PI)) size))
+               (range start (+ size start))))))
+
+(build-sine *sine-lut* 1024)
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}{Commandments III}
+    \Large And lastly, for the sake of yourself and others, use them to make better macros.
   \end{frame}
   \begin{frame}[fragile]
     \frametitle{defmacro!}
@@ -48,9 +113,9 @@
   \begin{frame}{References}
     \begin{itemize}
       \item Greg Hendershott: Fear of Macros
-      \item Doug Hoyte: Let Over Lambda
-      \item Colin Jones: Mastering Clojure Macros
-      \item Paul Graham: On Lisp
+      \item Doug Hoyte: Let Over Lambda (security in chapter four)
+      \item Colin Jones: Mastering Clojure Macros (security and robustness in chapter TODO)
+      \item Paul Graham: On Lisp (but also read the Graham Crackers)
       \item These slides: \texttt{https://github.com/hellerve/talks}
       \item A series of blog posts on Scheme macros: \texttt{https://blog.veitheller.de/scheme-macros}
     \end{itemize}
