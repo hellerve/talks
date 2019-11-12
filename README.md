@@ -20,7 +20,8 @@ Right now, the talks I’ve given/proposed are these:
 - [“Types—A Hitchhiker’s Guide” at clojuTRE 2019](/clojutre-2019) (Proposed)
 - [“Automate yourself within six months” at Neutral Interconnect Days 2019](/neutral-interconnect-days-2019)
   - The same talk (but a bit more technical) was also given at [NetUse AG](https://www.netuse.de/)
-    and is going to happen again at [DENOG 11](https://www.denog.de/de/meetings/denog11/).
+    and happened again at [DENOG 11](https://www.denog.de/de/meetings/denog11/)—and [was recorded
+    there](https://www.youtube.com/watch?v=ysGBGRxhk4Y).
 - [“Enhancing Your Libraries’ Security and Performance through Macros”](/clojure-berlin-november-2019)
 
 ## Want me to speak?
