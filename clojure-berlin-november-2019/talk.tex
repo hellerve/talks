@@ -47,6 +47,9 @@
       \end{minted}
     \end{listing}
   \end{frame}
+  \begin{frame}{Commandments I, Context}
+    \Large Avoid read-eval, and catch things statically if you can.
+  \end{frame}
   \begin{frame}{Commandments II}
     \Large Then, use them to say what you mean.
   \end{frame}
@@ -92,6 +95,9 @@ const float sine_lut[LUT_SIN_SIZE + 1]={
       \end{minted}
     \end{listing}
   \end{frame}
+  \begin{frame}{Commandments II, Context}
+    \Large Before you optimize, measure. Not just time, but memory as well!
+  \end{frame}
   \begin{frame}{Commandments III}
     \Large And lastly, for the sake of yourself and others, use them to make better macros.
   \end{frame}
@@ -110,11 +116,15 @@ const float sine_lut[LUT_SIN_SIZE + 1]={
       \end{minted}
     \end{listing}
   \end{frame}
+  \begin{frame}{Commandments III, Context}
+    \Large Macro-writing macros and nested backquotes are extremely powerful, but
+           hard to master. And again, think of your error messages!
+  \end{frame}
   \begin{frame}{References}
     \begin{itemize}
       \item Greg Hendershott: Fear of Macros
       \item Doug Hoyte: Let Over Lambda (security in chapter four)
-      \item Colin Jones: Mastering Clojure Macros (security and robustness in chapter TODO)
+      \item Colin Jones: Mastering Clojure Macros (performance in chapter four)
       \item Paul Graham: On Lisp (but also read the Graham Crackers)
       \item These slides: \texttt{https://github.com/hellerve/talks}
       \item A series of blog posts on Scheme macros: \texttt{https://blog.veitheller.de/scheme-macros}
