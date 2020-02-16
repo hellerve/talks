@@ -23,6 +23,8 @@ Right now, the talks I’ve given/proposed are these:
     and happened again at [DENOG 11](https://www.denog.de/de/meetings/denog11/)—and [was recorded
     there](https://www.youtube.com/watch?v=ysGBGRxhk4Y).
 - [“Enhancing Your Libraries’ Security and Performance through Macros”](/clojure-berlin-november-2019)
+- [“Automate your ISP on OSS” at Config Management Camp 2020](/config-management-camp-2020) (Cancelled)
+- [“SCHEME: An Interpreter for Extended Lambda Calculus” at Papers We Love Berlin, February 2020](/pwl-berlin-february-2020)
 
 ## Want me to speak?
 
