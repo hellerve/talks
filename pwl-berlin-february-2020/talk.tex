@@ -13,16 +13,16 @@
     \begin{itemize}
       \item Introduction and historical context
       \item Scheme primer
-      \item A “hairy control structure”
+      \item The good stuff
       \item Let’s see some code!
       \item Implementation notes
     \end{itemize}
   \end{frame}
+  \section{Introduction}
   \begin{frame}{The Paper}
     In 1975, a 21-year-old grad student named Guy Steele and his thesis
     advisor Gerald Sussman had something to show to the world: a little
     programming language called Scheme.
-
   \end{frame}
   \begin{frame}{The Paper}
     \begin{figure}
@@ -38,10 +38,11 @@
     The language was originally intended to be called SCHEMER, in reference
     to its ancestors PLANNER and CONNIVER.
   \end{frame}
+  \section{Scheme: A primer}
   \begin{frame}[fragile]
     \frametitle{Scheme: A primer}
-    In Scheme, we define functions using \textit{define}—you might know it as
-    \textit{defn} or \textit{defun} in other Lisps:
+    In Scheme, we define functions using \texttt{define}—you might know it as
+    \texttt{defn} or \texttt{defun} in other Lisps:
 
     \begin{listing}[H]
       \caption{Defining addition}
@@ -57,8 +58,8 @@
   \end{frame}
   \begin{frame}[fragile]
     \frametitle{Scheme: A primer}
-    We can \textit{quote} things using either the function or the abbreviation
-    \textit{'}.
+    We can \texttt{quote} things using either the function or the abbreviation
+    \texttt{'<thing>}.
 
     \begin{listing}[H]
       \caption{Using symbols as values}
@@ -70,10 +71,10 @@
   \end{frame}
   \begin{frame}[fragile]
     \frametitle{Scheme: A primer}
-    There is also the somewhat idiosyncratic \textit{labels}, which allows you
+    There is also the somewhat idiosyncratic \texttt{labels}, which allows you
     to define local functions that can be called inside a context, and can call
     themselves and other local functions in that context. You might know it as
-    \textit{letrec*} from later Schemes, and as simply \textit{let} in Common
+    \texttt{letrec*} from later Schemes, and as simply \texttt{let} in Common
     Lisp.
   \end{frame}
   \begin{frame}[fragile]
@@ -99,15 +100,157 @@
   \end{frame}
   \begin{frame}{And now?}
     There is more, though!
+  \end{frame}
+  \section{The good stuff}
+  \begin{frame}[fragile]
+    \frametitle{Continuations!}
+    \begin{listing}[H]
+      \caption{Jump around aka. “Sussman’s favorite style/Steele’s least favorite”}
+      \begin{minted}{scheme}
+(define sqrt (lambda (x epsilon)
+  ((lambda (ans looptag)
+    (catch returntag ; setup return label
+      (progn
+        (aset 'looptag (catch m m)) ; setup loop label
+        (if (< (abs (- (* ans ans) x)) epsilon)
+          (returntag ans) ; goto return label
+          nil) ; not done yet
+        (aset 'ans (/ (+ (/ x ans) ans) 2.0)) ; calculate step
+        (looptag looptag)))) ; goto loop label
+    1.0
+    nil)))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}{Wait, what?}
+    Continuations effectively allow us to pause and resume computations, to
+    pretend to call a function but instead moving between different interpreter
+    states.
+  \end{frame}
+  \begin{frame}{Wait, what?}
+    It’s pretty mind-bending at first and I understand if it’s a little much.
 
-    Let’s get to the good stuff.
+    \bigskip
+
+    \small The paper is a bit harsh here: “Anyone who doesn’t understand how
+    this manages to work probably should not attempt to use CATCH.”
   \end{frame}
-  \begin{frame}
-    TODO: Talk about new control structures.
+  \begin{frame}{Multiprocessing}
+    As if that wasn’t enough, we also have a multiprocessing story. We can
+    create new processes using \texttt{create!process}, start them using
+    \texttt{start!process}, stop them using \texttt{stop!process}, and
+    synchronize using \texttt{evaluate!uninterruptibly}.
   \end{frame}
-  \begin{frame}
-    TODO: Talk about code examples: samefringe, pattern matching, multiprocessing.
+  \begin{frame}{Oof.}
+    “This concludes the SCHEME Reference Manual.”
   \end{frame}
+  \section{Code Examples}
+  \begin{frame}[fragile]
+    \frametitle{Continuations, yet again!}
+    \begin{listing}[H]
+      \caption{Factorial, but the computation happens in continuations.}
+      \begin{minted}{scheme}
+(define fact (lambda (number continuation)
+  (if (= number 0)
+    (continuation 1)
+    (fact (- number 1)
+          (lambda (a) (continuation (* number a)))))))
+
+; simple computation
+(fact 5 (lambda (x) x))
+
+; computation, but we log each step
+(fact 5 (lambda (x) (block (print x) x)))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}{Multiprocessing}
+    Consider you have two functions, and you want to run them in parallel,
+    stopping whenever the first one terminates, and returning its result.
+
+    \bigskip
+
+    The authors call this “A Useless Multiprocessing Example”.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Multiprocessing}
+    \begin{listing}[H]
+      \caption{Dont!Shout!At!Me}
+      \begin{minted}{scheme}
+(define try!two!things!in!parallel (lambda (f1 f2)
+  (catch c
+    ((lambda (p1 p2)
+      ((lambda (f1 f2)
+        ; ensures both fs get started atomically
+        (evaluate!uninterruptibly
+          (block (aset 'p1 (create!process '(f1)))
+                 (aset 'p2 (create!process '(f2)))
+                 (start!process p1)
+                 (start!process p2)
+                 (stop!process **process**)))) ; stop yourself
+          ; what are f1 and f2?
+          ))
+      nil nil))))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Multiprocessing}
+    \begin{listing}[H]
+      \caption{The magic bits}
+      \begin{minted}{scheme}
+; f1 = 
+(lambda ()
+  ; stop the other process and return
+  ((lambda (value)
+    (evaluate!uninterruptibly
+      (block (stop!process p2) (c value))))
+   (f1))) ; do our thing
+; f2 =
+(lambda ()
+  ((lambda (value)
+    (evaluate!uninterruptibly
+      (block (stop!process p1) (c value))))
+   (f2)))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{Pattern matching!}
+    Let’s consider a simple pattern matching function.
+    \begin{listing}[H]
+      \caption{A simple pattern matcher.}
+      \begin{minted}{scheme}
+; ! = zero or more things (.* in regex)
+; ? = any single thing (. in regex)
+; anything else = itself
+
+(match '(A !B ?C ?C !B !E)
+       '(A X Y Q Q X Y Z Z X Y Q Q X Y R))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}{Pattern matching!}
+    Instead of just returning the match groups, however, we return the match
+    groups and a continuation that gives us backtracking and will return
+    alternative matches, Prolog-style.
+
+    \bigskip
+
+    How would we implement this?
+  \end{frame}
+  \begin{frame}{Pattern matching!}
+    \begin{figure}
+      \includegraphics[height=7cm]{match.png}
+      \caption{A simple solution to a simple problem.}
+    \end{figure}
+  \end{frame}
+  \begin{frame}{Examples I wish I would have had time for}
+    If you have the time to study the code examples, keep your eyes peeled
+    for the definition of the \texttt{do} macro and the \texttt{samefringe}
+    problem.
+  \end{frame}
+  \section{Implementation Notes}
   \begin{frame}
     TODO: Talk about the implementation.
   \end{frame}
