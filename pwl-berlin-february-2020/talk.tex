@@ -251,7 +251,56 @@
     problem.
   \end{frame}
   \section{Implementation Notes}
-  \begin{frame}
-    TODO: Talk about the implementation.
+  \begin{frame}{The interpreter}
+    The design of the interpreter is deceivingly straightforward.
+  \end{frame}
+  \begin{frame}{The interpreter}
+    It is
+    \begin{itemize}
+      \item lexically scoped,
+      \item based on continuations and “clinks”,
+      \item built on top of MacLISP (all of MacLISP is available as a primitive),
+      \item not purely functional, and
+      \item concurrent (but not parallel).
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{The implementation}
+    \begin{figure}
+      \includegraphics[width=14cm]{implementation.png}
+    \end{figure}
+  \end{frame}
+  \begin{frame}{The implementation}
+    It is striking to me how readable the implementation is.
+  \end{frame}
+  \begin{frame}{The implementation}
+    If you tried to read the implementation but gave up, here are a few pointers:
+
+    \begin{itemize}
+      \item Start in the evaluation loop.
+      \item Find out how components work.
+        \begin{itemize}
+          \item “Where do clinks pass through?”
+          \item “What happens when I call \texttt{catch}?”
+        \end{itemize}
+      \item Trace a program (if you must).
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{References}
+    \begin{itemize}
+      \item Gerald Jay Sussman and Guy L. Steele, Jr.: Scheme—An Interpreter for Extended Lambda Calculus
+      \item Guy L. Steele, Jr.: Rabbit—A Compiler for Scheme
+      \item These slides: \texttt{https://github.com/hellerve/talks}
+      \item A series of blog posts on Scheme macros: \texttt{https://blog.veitheller.de/scheme-macros}
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{The End}
+    \Huge Thank you!
+    \linebreak
+    \linebreak
+    \linebreak
+    \small Questions?
+    \linebreak
+    \linebreak
+    \tiny Slides at \texttt{https://github.com/hellerve/talks}
   \end{frame}
 \end{document}
