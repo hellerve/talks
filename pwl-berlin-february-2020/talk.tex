@@ -142,7 +142,7 @@
     synchronize using \texttt{evaluate!uninterruptibly}.
   \end{frame}
   \begin{frame}{Oof.}
-    “This concludes the SCHEME Reference Manual.”
+    \includegraphics[width=14cm]{reference_end.png}
   \end{frame}
   \section{Code Examples}
   \begin{frame}[fragile]
@@ -284,6 +284,67 @@
         \end{itemize}
       \item Trace a program (if you must).
     \end{itemize}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{The implementation}
+    Let’s look at a primitive: \texttt{if}.
+
+    \begin{listing}[H]
+      \caption{The internals of \texttt{if}.}
+      \begin{minted}{scheme}
+(defun if ()
+  (saveup 'if1) ; we will go there next
+  (setq **exp** (cadr **exp**) ; first eval the condition
+        **pc** 'aeval))
+
+(defun if1 ()
+  (cond
+    (**val** ; the condition was true, take then
+      (setq **exp** (caddr **exp**))
+     t ; otherwise take else
+      (setq **exp** (cadddr **exp**))))
+  (setq **pc** 'aeval))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}{Amen}
+    \includegraphics[width=14cm]{amen.png}
+  \end{frame}
+  \begin{frame}{That’s it?}
+    Cool, so that’s all there is to it?
+  \end{frame}
+  \begin{frame}{That’s it?}
+    Let’s talk about the multiprocess primitives really quick.
+  \end{frame}
+  \begin{frame}{Implementing threads}
+    This is what we need to do:
+
+    \begin{itemize}
+      \item Creating a process creates new registers and sets up a new interpreter
+      \item Starting a process puts it in the process queue.
+      \item Stopping a process removes it from the process queue and terminates it if it is the current process.
+      \item Evaluating uninterruptibly means binding a flag to \texttt{nil} that tells the interpret er not to swap processes.
+      \item Then we need to build a magical scheduler that swaps process in the queue once in a while.
+    \end{itemize}
+
+    Ta-dah!
+  \end{frame}
+  \begin{frame}{Implementing continuations}
+    What about continuations?
+
+    \begin{itemize}
+      \item \texttt{catch} tells the evaluator to switch the clink.
+      \item Then we need to know how and when to switch these out in the main loop (hint: look at \texttt{evlis}).
+      \item Swapping process becomes almost equivalent to swapping continuations!
+    \end{itemize}
+
+    Ta-dah!
+  \end{frame}
+  \begin{frame}{Implementing macros}
+    \includegraphics[width=14cm]{beasties.png}
+  \end{frame}
+  \begin{frame}{Fin}
+    \includegraphics[width=14cm]{interpreter_end.png}
   \end{frame}
   \begin{frame}{References}
     \begin{itemize}
