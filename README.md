@@ -25,6 +25,7 @@ Right now, the talks I’ve given/proposed are these:
 - [“Enhancing Your Libraries’ Security and Performance through Macros”](/clojure-berlin-november-2019)
 - [“Automate your ISP on OSS” at Config Management Camp 2020](/config-management-camp-2020) (Cancelled)
 - [“SCHEME: An Interpreter for Extended Lambda Calculus” at Papers We Love Berlin, February 2020](/pwl-berlin-february-2020)
+- [“All I have is a hammer, now give me your nails!” at EnthusiastiCon, June 2020](/enthusiasticon-2020)
 
 ## Want me to speak?
 
