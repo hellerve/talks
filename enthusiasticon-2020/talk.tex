@@ -1,4 +1,6 @@
 \documentclass[aspectratio=169]{beamer}
+\usepackage{minted}
+\usepackage{listings}
 \usetheme{veit}
 \title{All I have is a hammer, now give me your nails!}
 \date{\today}
@@ -6,4 +8,53 @@
 \institute{EnthusiastiCon 2020}
 \begin{document}
   \maketitle
+  \section{Lisp}
+  \begin{frame}[fragile]
+    \frametitle{Lisp}
+    \begin{listing}[H]
+      \caption{A definition of \texttt{and}.}
+      \begin{minted}{clojure}
+(defmacro and [:rest args]
+  (list 'if (first args) (list 'and (rest args)) false))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \section{SmallTalk}
+  \begin{frame}[fragile]
+    \frametitle{SmallTalk}
+    \begin{listing}[H]
+      \caption{Booleans as objects.}
+      \begin{minted}{smalltalk}
+True >> ifTrue: trueBlock ifFalse: falseBlock [
+  ^ trueBlock value
+]
+
+False >> ifTrue: trueBlock ifFalse: falseBlock [
+  ^ falseBlock value
+]
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \section{Forth}
+  \begin{frame}[fragile]
+    \frametitle{Forth}
+    \begin{listing}[H]
+      \caption{Comments on the stack.}
+      \begin{minted}{forth}
+: ( 41 WORD DROP ; IMMEDIATE
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \section{APL}
+  \begin{frame}[fragile]
+    \frametitle{APL}
+    \begin{listing}[H]
+      \caption{Comments on the stack.}
+      \begin{minted}{apl}
++/⍳15 ⍝ add, reducing over the numbers to 15
+
+∘.,⍨⍳10 ⍝ outer product of the numbers to 15 to themselves
+      \end{minted}
+    \end{listing}
+  \end{frame}
 \end{document}
