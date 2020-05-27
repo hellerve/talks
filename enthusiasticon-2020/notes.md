@@ -1,129 +1,141 @@
-Hello everyone! I’m Veit, and this talk is about abstractions or, more
-specifically, about abstractions in philosophy.
+Hey! I’m Veit, and today I want to talk about hammers and nails.
 
-Let me start by introducing my agenda. First, we’re going to talk about my
-motivation, then about one book, then about another book, and finally we’re
-going to revisit my motivations and summarize. Alright? Let’s go!
+Most of us have probably heard the old saying "If all you have is a hammer,
+everything looks like a nail”. It’s one of the many polite ways in which
+we’re telling our peers that they are doing something wrong.
 
-I’m going to start with a disclaimer—this talk has a lot of disclaimers. This
-one deals with the branch of philosophy that we talk most about when we talk
-about technology and philosophy: technophilosophy. Think Ray Kurzweil, AI
-ethics, that sort of stuff. That’s all very interesting, but not what I want to
-talk about today.
+The sentence didn’t actually originate in Computer Science, though. It is
+often referred to as “Maslow’s Law” or “Maslow’s Hammer”, paying tribute to
+a psychologist who codified that law in an article in the 60s, but it is
+probably much older than that. My cursory search for its origin pointed at
+least to the 19th century, but it’s probably even older than that.
 
-Instead, I want to focus on the fact that we always build abstractions. We
-always build abstractions, no matter whether we build an API, render an image,
-or write a network driver.
+And we use it a bit as a truism, as something to avoid any argument. A phrase
+intended to burn the battleground of thought, once and for all, if you will
+entertain my pathos for a second.
 
-Philosophers also always build abstractions, although they deal with a different
-set of things. They build abstractions for ideas such as cognition, self,
-identity, all that jazz. But abstractions they build, and they have been doing
-so for a few thousand years at least. What I want to do today is shine a few
-spotlights on some ideas from some philosophers that might be interesting for
-you, and hopefully whet your appetite for more.
+And I keep coming back to that phrase, because I usually hate generalizations.
+All our tools, be it languages or frameworks or interfaces, impose some form of
+order on our day-to-day existence as technologists. Some lenses are just more
+focused than others.
 
-The first objection that might come to your mind is that you haven’t studied
-philosophy, and neither have I—and English isn’t my first language. But the
-beauty about philosophy is that it deals with very simple things: cognition,
-self, identity, all those things you can relate to and have an immediate idea
-of. You might not always understand what people are saying about these things,
-but at their core, they’re very close to you.
+And so the question we need to ask ourselves is: is it always bad to submit
+fully to that lens?
 
-With that out of the way, let’s look at the first book.
+And in my quest to get a satisfying answer to this question I at some point
+remembered another overused quote that shapes our thought, at least in certain
+circles.
 
-And here I’m going to present my second disclaimer: this book isn’t actually
-about what I want to talk about. Instead it’s about episteme, which are
-basically those assumptions that we build our worldviews and knowledge on
-without knowing that we do. This doesn’t make any sense without context, and I’m
-not concerned with that today. Instead, what I want to talk about is the
-introduction, where he talks a little bit about order, classifications, and
-abstractions.
+It is by Alan Perlis, of Algol and Turing Award fame, and it reads like this:
+“It is better to have 100 functions operate on one data structure than 10
+functions on 10 data structures”. It’s historically been one of those phrases
+that slightly eccentric Lisp people used to rationalize the spartan aesthetic
+of their programming environments.
 
-Foucault starts his introduction with a quote by Jorge Luis Borges: [read
-quote]. And this is an obviously absurd classification, but it begs the
-question: why is it absurd?
+But these days most of us don’t use “one data structure”. We use heaps and
+queues and lists and stacks and trees and hashmaps and Hash-Array Mapped
+Semi-Tries with orange peels and crushed ice.
 
-I would argue it’s absurd in the same way that this is absurd. For those of you
-who don’t know what they’re looking at, this is a traceback, where first call
-... And what I would argue is that Borges’ classification and this one are
-flawed in the same way, because you can obtain, acquire and get an access token,
-and it’s all the same thing, and in the same vein an animal can both “belong to
-the emperor” and be “embalmed”.
+So let’s ask ourselves: what do we get if we try to make everything one data
+structure? I’m going to pick four languages that went down that route, more or
+less adhering to it, and I’m going to show some of their affordances.
 
-So what defines classifications is the space between them, not their label. What
-I mean by that is that a good abstraction separates things very clearly from
-one another. You have one thing with a bunch of functionality here, and then
-a very different thing with a very different set of functions over there, and
-neither the things nor their functionality should overlap.
+The first one I’m going to talk about is the one I’m most familiar with: Lisp.
+Lisp stands for “List Processing”. And the proof is in the pudding. Everything
+in Lisp is a list, even the syntax!
 
-And why would I even classify? Well, what’s neat about classifications is that
-if they are good and sensible, they lead to better abstractions. If I know where
-to look for stuff, I will find it earlier, like on a well organized bookself.
+Let’s look at an example—this uses more-or-less Clojure, because I wanted it to
+be concise. For those of you who don’t know Lisp, everything in parentheses is
+a list. So the definition, building a macro here, is a list as well!
 
-It’s also important to note that whenever you abstract, you build a
-classification, whether you meant to or not. By even just rearranging things,
-their context and their meaning changes.
+And this particular macro takes a bunch of arguments, and builds another list.
+And that list will end up looking like an if statement, or rather, it will be
+an if statement. And thus the macro and is just a representation of logical
+conjunction, expressed in terms of if. And we work on the syntax the same way
+we work on data.
 
-At the end of this section I want to talk about an important caveat though:
-never assume that your abstractions are _the_ way to view the world. Order
-always imposes hierarchy, and it’s easy to get sucked into that. But no
-hierarchy will ever tell you the whole story. There are obviously flawed ways
-to rank humans, for instance, like race, and then there are more heinously
-flawed things that at a first glance might make sense, like IQ or even
-intelligence itself, were it measurable. All your classifications impose
-hierarchy, and that’s not always good.
+Let’s go to the language I’m second most familiar with: SmallTalk. SmallTalk is
+the grandfather of object-oriented languages, but it’s a very active
+grandfather, still around and telling the kids to stay of his lawn so that he
+can enjoy the piece and quiet of a good development environment.
 
-Now I want to talk about the second book, which is Zen and the Art of
-Motorocycle Maintenance by Robter Pirsig. It’s a very good book, about a
-motorcycle trip of a father and a son, a life changed by mental illness, and
-his notion of “Quality”.
+And, SmallTalk contends, in a good object-oriented language EVERYTHING should
+be an object. There are no primitives. There is no control flow. You get
+objects.
 
-Quality is the thing that exists for isntance between the observer and the
-observed of a painting. If I look at the Mona Lisa, I assign qualities to it,
-and in the same vein when I look at Cubism I assign a different set of
-qualities to it. And what’s especially interesting is that he maintains that
-these qualities only exist in the relationship, meaning that the qualities that
-I see are not the ones that you see and vice versa.
+And so in SmallTalk, True is a subclass of Boolean, and so is False. And both
+of them implement a function called ifTrue:ifFalse: that takes two blocks, kind
+of like callbacks. And True will call the trueBlock, and False will call
+the falseBlock, and anything doing any sort of logic will return either of those
+classes that you can send this message to. And everything just sort of works
+out okay.
 
-What this means is that abstractions can never be objective. There is always
-context, always a use case. This is very important to keep in mind whenevery
-you’re building abstractions. They’re never perfect, no matter how hard you
-try.
+At this point I should probably mention that it’s fine not to understand the
+code examples. Let them wash over you.
 
-So the question we have to ask ourselves then is: how do bring objectivity
-back, or at least accomodate users with a different set of ideas? And at this
-point I want to bring up the only technical thing in this talk: Git.
+Let’s look at two languages I’m less familiar with: Forth and APL.
 
-Git is the ultimate leaky abstraction. I mean that in a very positive way, and
-I’ll explain how by example.
+Forth works on stacks. Everything is put on a stack, and all the operator
+operate on the things on that stack, and everything happens from left to right,
+always.
 
-What I mean by that is that in Git you have both control over what they call
-the porcelain, which is all the high-level functionality that Git exposes, and
-the plumbing, which are the low-level functions that they wouldn’t need to
-expose necessarily. This gives very advanced users a way to control even the
-way commits are built and other things like that.
+My Forth example actually implements comments. Comments start with an opening
+parenthesis and close with a closing parenthesis. The function for comments is
+thus just opening parenthesis. It puts the closing parenthesis on the stack,
+and then just collects everything until it finds that (that’s what word does),
+and then drops the parenthesis again, ignoring all the input. It is an
+“immediate” word which basically means that it should be run as soon as it is
+seen in the code by the compiler, comparable to what a macro would do in other
+languages. And thus implementing comments is as simple as telling the compiler
+to jump ahead.
 
-I guess the question we just answered is whether abstractions have to hide their
-details, and I’d argue that that only works if you consider your abstractions
-to be good enough for everyone, which they never are.
+Let’s go to APL, because I’m running out of time. APL stands for “A Programming
+Languages”, but I always imagine it to stand for “Array Programming Language”.
+APL and its descendants (there is a whole family, like for all languages that I
+mention in this talk) mostly operate on n-dimensional arrays. Everything is an
+operation on an array, and this, too, leads to idiosyncratic solutions.
 
-So, in summary:
+APL also has a somewhat infamous fetish for unique glyphs, and I couldn’t get
+LaTEX to render my code example, so I decided to type them into a REPL and take
+a screenshot. I apologize.
 
-Thinking about abstractions will help you articulate your aesthetics and
-standards and help figure out whether you’re doing a good job adhering to them.
+I actually brought two examples. Everything behind this little round figure
+with two legs is a comment, so this is the first and only example in this talk
+for documented code. The first program sums the numbers from 1 to 15 by
+building an array, and then reducing over it using addition. In APL, you
+usually read the program from right to left, barring any comments. The second
+example is a little more tricky. It’s the outer product of the numbers from one
+to ten with themselves, which is a fancy way to say that it’s all the
+combinations of the numbers from one to ten. The first three glyphs implement
+the outer product part, the judgemental emoticon in the middle says to use the
+argument to its right twice to the thing on its left, and then we take the
+numbers from one to ten.
 
-If nothing else, reading philosophy will either inspire you, or at least build
-your vocabulary to articulate what your ideals are, which is useful in its own
-right.
+Now this has been a tour de force of four completely and utterly anachronistic
+languages, but the main question that you might have right now is “So what?”.
 
-I want to finish up with a personal guidebook on how to write better
-abstractions. [...]
+I mean, this is all cool, and the examples that I showed might have made you go
+“huh, this is really clever”. But does it really do anything for us? What do we
+gain by giving up the comfort of something more expressive, more general? And
+I’m not naming names here, every language is a beautiful flower.
 
-I also have a commentated reading list, but sadly I don’t have time to go
-through it anymore. Instead I’ll refer you to my talks repository, where you
-can find these slides, and we can talk about any and all things and any and all
-of the books I mentioned afterwards.
+I like to think that thinking that uses less axioms is more learnable. The less
+base things I need to know, the better. And it answers a lot of questions. How
+do I do anything in Lisp, in Forth, in APL? I use a list, a stack, an array.
+
+But the other side of the equation is that you have a lot of new questions to
+answer that you didn’t have to answer before. How do I talk to the filesystem
+if everything is an array? In what way is a graphics stack an object?
+
+But I think that there is a quality here that is liberating, a breath of fresh
+air in a world that is all too often concerned with what we already do day to
+day. Constraints can be liberating instead of, well, constraining. This is
+purely anecdotal, but I found to be highly productive in SmallTalk and Lisp,
+because I could just pop open any piece of machinery, no matter how deep in my
+stack, and understand it, because it speaks the same language that I speak,
+fifteen layers of abstraction later.
+
+And so if I am asked to use a hammer, I’m fully prepared to make the world my
+nail.
 
 Thank you.
-
-
