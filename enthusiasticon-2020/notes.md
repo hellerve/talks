@@ -121,7 +121,9 @@ I’m not naming names here, every language is a beautiful flower.
 
 I like to think that thinking that uses less axioms is more learnable. The less
 base things I need to know, the better. And it answers a lot of questions. How
-do I do anything in Lisp, in Forth, in APL? I use a list, a stack, an array.
+do I do anything in Lisp, in Forth, in APL? I use a list, a stack, an array. I
+encourage you to read “It’s not what programming languages do, it’s what they
+shepherd you to” by Jussi Pakkanen.
 
 But the other side of the equation is that you have a lot of new questions to
 answer that you didn’t have to answer before. How do I talk to the filesystem
