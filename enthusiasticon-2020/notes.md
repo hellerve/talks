@@ -90,7 +90,7 @@ languages. And thus implementing comments is as simple as telling the compiler
 to jump ahead.
 
 Let’s go to APL, because I’m running out of time. APL stands for “A Programming
-Languages”, but I always imagine it to stand for “Array Programming Language”.
+Language”, but I always imagine it to stand for “Array Programming Language”.
 APL and its descendants (there is a whole family, like for all languages that I
 mention in this talk) mostly operate on n-dimensional arrays. Everything is an
 operation on an array, and this, too, leads to idiosyncratic solutions.
@@ -133,9 +133,11 @@ day. Constraints can be liberating instead of, well, constraining. This is
 purely anecdotal, but I found to be highly productive in SmallTalk and Lisp,
 because I could just pop open any piece of machinery, no matter how deep in my
 stack, and understand it, because it speaks the same language that I speak,
-fifteen layers of abstraction later.
+fifteen layers of abstraction later. There is something to be said for using
+the same tools everywhere; it leads to a certain uniformity, charm, and
+creativity that I personally miss otherwise.
 
-And so if I am asked to use a hammer, I’m fully prepared to make the world my
-nail.
+And so, in conclusion, if I am asked to use a hammer, I’m fully prepared to
+make the world my nail.
 
 Thank you.
