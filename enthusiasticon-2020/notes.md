@@ -99,7 +99,7 @@ APL also has a somewhat infamous fetish for unique glyphs, and I couldn’t get
 LaTEX to render my code example, so I decided to type them into a REPL and take
 a screenshot. I apologize.
 
-I actually brought two examples. Everything behind this little round figure
+I actually have two examples. Everything behind this little round figure
 with two legs is a comment, so this is the first and only example in this talk
 for documented code. The first program sums the numbers from 1 to 15 by
 building an array, and then reducing over it using addition. In APL, you
