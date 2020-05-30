@@ -1,4 +1,4 @@
-\documentclass[aspectratio=169]{beamer}
+\documentclass[aspectratio=169,14pt]{beamer}
 \usepackage[utf8]{inputenc}
 \usepackage{minted}
 \usepackage{listings}
@@ -10,15 +10,18 @@
 \begin{document}
   \maketitle
   \begin{frame}{Motivation}
-    “If all you have is a hammer, everything looks like a nail.” -- Every
-    programmer ever
+    “If all you have is a hammer, everything looks like a nail.”
+
+    -- Every programmer ever
   \end{frame}
   \begin{frame}{Motivation}
     But: is it always bad to see the world through a particular lens?
   \end{frame}
   \begin{frame}{Motivation}
     “It is better to have 100 functions operate on one data structure than 10
-    functions on 10 data structures.” -- Alan Perlis
+    functions on 10 data structures.”
+
+    -- Alan Perlis
   \end{frame}
   \begin{frame}{Motivation}
     What do you get if you try to make everything one data structure?
@@ -30,7 +33,9 @@
       \caption{A definition of \texttt{and}.}
       \begin{minted}{clojure}
 (defmacro and [:rest args]
-  (list 'if (first args) (list 'and (rest args)) false))
+  (list 'if (first args)
+    (list 'and (rest args))
+    false))
       \end{minted}
     \end{listing}
   \end{frame}
@@ -68,6 +73,7 @@ False >> ifTrue: trueBlock ifFalse: falseBlock [
   \begin{frame}{Conclusion?}
     This is neat, but what is the appeal, really?
 
+\bigskip
     What do we gain?
   \end{frame}
   \begin{frame}{Conclusion}
@@ -80,6 +86,7 @@ False >> ifTrue: trueBlock ifFalse: falseBlock [
     Beyond pure novelty, there is a liberating quality to seeing the world
     through a particular lens.
 
+\bigskip
     Constraints can be liberating!
   \end{frame}
   \begin{frame}{}
