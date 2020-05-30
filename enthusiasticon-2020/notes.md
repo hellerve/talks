@@ -91,15 +91,15 @@ seen in the code by the compiler, comparable to what a macro would do in other
 languages. And thus implementing comments is as simple as telling the compiler
 to jump ahead.
 
-Let’s go to APL, because I’m running out of time. APL stands for “A Programming
-Language”, but I always imagine it to stand for “Array Programming Language”.
-APL and its descendants (there is a whole family, like for all languages that I
-mention in this talk) mostly operate on n-dimensional arrays. Everything is an
-operation on an array, and this, too, leads to idiosyncratic solutions.
+Let’s look at APL. APL stands for “A Programming Language”, but I always
+imagine it to stand for “Array Programming Language”. APL and its descendants
+(there is a whole family, like for all languages that I mention in this talk)
+mostly operate on n-dimensional arrays. Everything is an operation on an array,
+and this, too, leads to idiosyncratic solutions.
 
 APL also has a somewhat infamous fetish for unique glyphs, and I couldn’t get
 LaTEX to render my code example, so I decided to type them into a REPL and take
-a screenshot. I apologize.
+a screenshot. This is what we’re working with.
 
 I actually have two examples. Everything behind this little round figure
 with two legs is a comment, so this is the first and only example in this talk
