@@ -38,7 +38,9 @@ Semi-Tries with orange peels and crushed ice.
 
 So let’s ask ourselves: what do we get if we try to make everything one data
 structure? I’m going to pick four languages that went down that route, more or
-less adhering to it, and I’m going to show some of their affordances.
+less adhering to it, and I’m going to show some of their affordances and how
+they make some hard things simple, and I’m going to gracefully omit the times
+when they make simple things hard.
 
 The first one I’m going to talk about is the one I’m most familiar with: Lisp.
 Lisp stands for “List Processing”. And the proof is in the pudding. Everything
