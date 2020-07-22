@@ -43,7 +43,12 @@ runtime, which implements maps)
 What is the take-away here? There are a few: firstly, memory bugs do not need to
 lead to corruption to cause problems. Secondly, if you have a runtime, some
 things are out of your control, and you have to pray that the core developers
-get things right.
+get things right. Shoutouts go out to Erlang, where the developers actively
+tried breaking their map implementation with generative testing, leading to a
+more robust implementation. I’ll link to a series of blog posts at the end. Go
+check them out, especially if you’re not already convinced that property-based
+testing and QuickCheck are awesome, or you want to learn more (or the first
+thing) about hash-array-mapped tries.
 
 Similar things can happen in Haskell—this is going to be an extremely technical
 bit of this talk, but humor me for a second. Haskell is a lazy language. Thi
