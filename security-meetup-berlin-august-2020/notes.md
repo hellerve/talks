@@ -3,14 +3,19 @@ languages.
 
 There are many ways in which supposedly memory safe languages may not live up to
 their potential. In this talk I will mostly focus on issues within the
-constraints of the language rather than talking about their runtimes. This is
-because the runtimes usually are written in memory unsafe languages like C or
-C++. They are subject to the same bugs that you find in any other C code base.
-Just consider Python, which has had 49 CVEs assigned to it in the last 12 years,
-13 of which were overflow-related. Or think of the various JavaScript runtimes
-and how people keep crafting exploits to break out of their sandboxing
-mechanisms, whether it’s through fooling the JIT’s range analysis or through
-simple bugs in the implementation of primitives.
+constraints of the language rather than talking about their compiler or
+interpreter environments. This is because the runtimes usually are written in
+memory unsafe languages like C or C++. They are subject to the same bugs that
+you find in any other C code base. Just consider Python, which has had 49 CVEs
+assigned to it in the last 12 years, 13 of which were overflow-related. Or think
+of the various JavaScript runtimes and how people keep crafting exploits to
+break out of their sandboxing mechanisms, whether it’s through fooling the
+JIT’s range analysis or through simple bugs in the implementation of
+primitives.
+
+We will talk about runtimes, though, because sometimes the devil is in an
+execution environment that we didn’t even really know was there, or didn’t
+consider when thinking about threats.
 
 While talking about this it will seem as if I am bashing on what might be your
 favorite programming language. I'm not doing that because I think that language
@@ -22,23 +27,24 @@ and it is important to know how that happens.
 Let's start with denial of service or DOS bugs. DOS bugs can happen in a variety
 of ways and today I want to talk about those kinds of DOS bugs that you might
 encounter in the wild. To drive the point home, I will talk about real problems
-that exist in your language today. if your language is Go or Haskell.
+that exist in your language today. If your language is Go or Haskell.
 
 My first example concerns the Go programming language. More specifically I want
 to talk about a bug related to maps, a very foundational key value data
 structure of the language. In issue number 20135 the developer reports that a
 map will never shrink, i.e. it will always take up as much memory as it did when
 it was at its biggest and the only way to shrink it again is to get rid of it
-entirely, copying its contents to a new map. Now, this is a very specific
+entirely, copying its contents to a new map. I brought an example program, but
+I’m not sure how useful it is. If you want me to go through the program with
+you, you can ask me during Q&A. Now, this is a very specific
 problem, and it will likely only ever be a problem if you have many maps that
 might grow to a certain size and then shrink again. That memory will never be
 freed, and eventually, we run out of memory. The issue has been discovered in
-2017, and it is still open. If you know about it you know how to mitigate it,
-but currently there is no way to know about it unless you either run into it
-yourself or thrawl through the 5916 open issues on the GitHub issue
-tracker—honestly, who does that before writing their web application in Go?
-(Note that I cheated a little here, since this is very much related to the Go
-runtime, which implements maps)
+2017, and it is still open. If you know about it you know how to mitigate it
+(just make a new map and copy the entries), but currently there is no way to
+know about it unless you either run into it yourself or thrawl through the
+5916 open issues on the GitHub issue tracker—honestly, who does that before
+writing their web application in Go?
 
 What is the take-away here? There are a few: firstly, memory bugs do not need to
 lead to corruption to cause problems. Secondly, if you have a runtime, some
@@ -51,15 +57,28 @@ testing and QuickCheck are awesome, or you want to learn more (or the first
 thing) about hash-array-mapped tries.
 
 Similar things can happen in Haskell—this is going to be an extremely technical
-bit of this talk, but humor me for a second. Haskell is a lazy language. Thi
+bit of this talk, but humor me for a second. Haskell is a lazy language. This
 means that a value is only computed when it’s needed for the first time. This
 makes profiling Haskell applications relatively hard, but comes with a unique
-set of benefits that I have no time to get into. What I do have to explain is
-that to achieve this, we need a basic building block called a “thunk”, which is
-basically an unrealized value, a computation that still needs to happen. It can
-be big or small, but it needs to be passed around the runtime as-is until
-someone requests for it to be evaluated. It’s all pretty complicated, and it
-gets even weirder when garbage collection is concerned. For those of you in the
+set of benefits that I have no time to get into, because they’re big reason
+some people choose Haskell over other ML-like functional languages. What I do
+have to explain is that to achieve this, we need a basic building block called
+a “thunk”, which is basically an unrealized value, a computation that still
+needs to happen. It can be big or small, but it needs to be passed around the
+runtime as-is until someone requests for it to be evaluated. Let’s see this in
+action.
+
+Here we have a binding for two variables, one being arithmetic—that’s what `x`
+is—, and one blowing up—that’s what `error` is for, which is bound to `y`. But
+in the body of the binding we only use `x`, and `y` is never needed, so it
+works fine. In thunks this looks like this: you have a thunk here, it’s the
+computation, unevaluated, and it’s sitting right here. And then you have a
+thunk over there, which is the bad thunk. Then we request the value of `x`,
+because we want to print it in our console, for instance, and this thunk, and
+only this one, gets evaluated.
+
+It’s all pretty complicated, and it gets even weirder when garbage collection
+is concerned. For those of you in the
 room who have some experience with virtual machines and garbage collection, you
 might want to check out the Haskell model: it’s fantastically complicated
 because of this, and because, in contrast to other VMs like the JVM, it
@@ -73,13 +92,26 @@ susceptible to space leaks, especially if STM—their concurrency model—is
 involved. I don’t want to dive too deeply into this but I’ll leave you with some
 papers that are very illuminating here in the end. What I do want to make clear
 is that this can lead to a similar class of bugs as in Go, where our program
-runs out of memory without actually needing all of it.
+runs out of memory without actually needing all of it. And I want you to leave
+you with a quote by Neil Mitchell, because I found it to be very apt:
+"Pinpointing space leaks is a skill that takes practice and perseverance.
+Better tools could significantly simplify the process." And, as things always
+go, these better tools never really arrived, because noone cares about program
+correctness, not even Haskellers. The paper I quoted from is from 2013. Here’s
+how Neil Mitchell operates now: "Using the benchmark I observed a space leak.
+But the program is huge, and manual code inspection usually needs a 10 line
+code fragment to have a change. So I started modifying the program to do less,
+and continued until the program did as little as it could, but still leaked
+space. After I fixed a space leak, I zoomed out and saw if the space leak
+persisted, and then had another go." Does that sound awfully manual? It does to
+me. This is from a blog post from this year. If someone wants to make Haskell
+security much better, please write tooling for us!
 
-What’s the take-away here? If you have a runtime, you have to know it to hunt
-down your bugs. And it’s another level of complexity if your runtime is very
-complex.
+Anyway, what’s the take-away here? If you have a runtime, you have to know it
+to hunt down your bugs. And it’s another level of complexity if your runtime is
+very complex.
 
-But let’s move away from DOS bugs for a while, and let’s talk about
+But let’s move away from DOS bugs for now, and let’s talk about
 honest-to-god memory corruption bugs. To do that, we have to move away from the
 class of languages that use runtimes and garbage collection, because if they’re
 implemented properly—which they never are because we’re all human—they eliminate
@@ -88,8 +120,9 @@ this class of bugs. You shouldn’t even be able to touch memory anywhere.
 So let’s talk about Rust. I can already feel the inner tension of those of you
 who are very fond of Rust and want to jump to defend it. Rust is great, just
 like Haskell and Go are, but it comes with its own shortcomings. The most
-dangerous bugs usually involve the unsafe keyword in some capacity or another,
-and I would argue that you should forbid unsafe code using
+dangerous bugs usually involve the `unsafe` keyword in some capacity or another,
+like this silly example which will make your program bite the dust, and I would
+argue that you should forbid unsafe code using
 `#![forbid(unsafe_code)]` whenever possible, to avoid ending up in an advisory
 on rustsec.org (on there, we find all the fun bugs that you find in C as well:
 use after free, undefined behavior, doubles frees, unknown memory reads). But
