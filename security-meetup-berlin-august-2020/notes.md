@@ -4,7 +4,7 @@ languages.
 There are many ways in which supposedly memory safe languages may not live up to
 their potential. In this talk I will mostly focus on issues within the
 constraints of the language rather than talking about their compiler or
-interpreter environments. This is because the runtimes usually are written in
+interpreter environments. This is because they usually are written in
 memory unsafe languages like C or C++. They are subject to the same bugs that
 you find in any other C code base. Just consider Python, which has had 49 CVEs
 assigned to it in the last 12 years, 13 of which were overflow-related. Or think
@@ -22,15 +22,44 @@ favorite programming language. I'm not doing that because I think that language
 or in fact any of the languages that I talk about are bad but because I think it
 is important to realize that there are no silver bullets. There are good
 approaches but in the end you will always be able to shoot yourself in the foot
-and it is important to know how that happens.
+and it is important to know how that happens. Whenever I use a specific language,
+I use it because it illustrates an underlying idea, nothing more, and nothing
+less.
+
+One more thing before I start: I will cast a quick highlight on a few things,
+hoping that this will lead to heightened sensibilities when thinking about
+these things. If you tune out for a problem here and there, no worries! It
+probably doesn’t concern you. And if it does, and you still weren’t listening,
+I reserve the right to a hearty "told-ya-so".
 
 Let's start with denial of service or DOS bugs. DOS bugs can happen in a variety
 of ways and today I want to talk about those kinds of DOS bugs that you might
 encounter in the wild. To drive the point home, I will talk about real problems
 that exist in your language today. If your language is Go or Haskell.
 
-My first example concerns the Go programming language. More specifically I want
-to talk about a bug related to maps, a very foundational key value data
+My first example concerns the Go programming language, but not really. What I
+actually want to talk about is concurrency, and Go happens to be one of the
+languages that make concurrency extremely easy, and thus it’s easier to get it
+wrong.
+
+In Go, channels are the main abstraction for communicating between threads—or,
+rather, Goroutines, which are Go’s notion of concurrent processes. Think of
+mailboxes in Erlang, or queues in microservice architectures. Channels are
+easy to construct, and easy to work with: you request one, give it to the
+processes, and then you can read from them and write to them! Sadly, this leads
+to a tendency to forget about them. We forget to read from them, leading to
+memory leaks—because we  can’t free them! We forget to write a finalizer
+message to our channel or to close it, and that leads to goroutine leaks...
+And so on, and so on.
+
+Remember, when concurrency is involved, you want to make sure you know about
+the lifetimes of your processes. You want to know how and when they start,
+and how and when they die. Basically, our model should account for anything
+but solar flares and power outages, and if it doesn’t, you should know that
+that is so.
+
+Next up, staying with DoS bugs and Go—and this time being a bit more specific—, I
+want to talk about a bug related to maps, a very foundational key value data
 structure of the language. In issue number 20135 the developer reports that a
 map will never shrink, i.e. it will always take up as much memory as it did when
 it was at its biggest and the only way to shrink it again is to get rid of it
@@ -60,7 +89,7 @@ Similar things can happen in Haskell—this is going to be an extremely technica
 bit of this talk, but humor me for a second. Haskell is a lazy language. This
 means that a value is only computed when it’s needed for the first time. This
 makes profiling Haskell applications relatively hard, but comes with a unique
-set of benefits that I have no time to get into, because they’re big reason
+set of benefits that I have no time to get into, because they’re a big reason
 some people choose Haskell over other ML-like functional languages. What I do
 have to explain is that to achieve this, we need a basic building block called
 a “thunk”, which is basically an unrealized value, a computation that still
@@ -92,8 +121,9 @@ susceptible to space leaks, especially if STM—their concurrency model—is
 involved. I don’t want to dive too deeply into this but I’ll leave you with some
 papers that are very illuminating here in the end. What I do want to make clear
 is that this can lead to a similar class of bugs as in Go, where our program
-runs out of memory without actually needing all of it. And I want you to leave
-you with a quote by Neil Mitchell, because I found it to be very apt:
+runs out of memory without actually needing all of it, and that, again, one of
+our sad conclusions is that concurrency makes everything harder. And I want to
+leave you with a quote by Neil Mitchell, because I found it to be very apt:
 "Pinpointing space leaks is a skill that takes practice and perseverance.
 Better tools could significantly simplify the process." And, as things always
 go, these better tools never really arrived, because noone cares about program
