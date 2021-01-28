@@ -40,4 +40,6 @@ want to know what I’m interested in talking about first. A non-exhaustive list
 - [Types](/clojutre-2019)
 
 If you find any of these interesting or think you might have a different topic
-for me, [feel free to reach out](mailto:veit@veitheller.de)!
+for me, [feel free to reach out](mailto:veit@veitheller.de)! My interests are
+legion, I just might have some thoughts on whatever you have lying around at
+home.
