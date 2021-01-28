@@ -30,12 +30,12 @@ Right now, the talks I’ve given/proposed are these:
 
 ## Want me to speak?
 
-If you want me to speak at your conference/meetup/all-night rave, you might want
-to know what I’m interested in talking about first. A non-exhaustive list:
+If you want me to speak at your conference/meetup/all-weekend rave, you might
+want to know what I’m interested in talking about first. A non-exhaustive list:
 
 - [Carp](https://github.com/carp-lang/carp)
 - [Generative Art](https://veitheller.de/art/)
-- [Abstractions](https://blog.veitheller.de/Abstractions.html)
+- [Abstractions](/enthusiasticon-2019)
 - [How you can leverage macros to implement language features](https://blog.veitheller.de/scheme-macros/)
 - [Types](/clojutre-2019)
 
