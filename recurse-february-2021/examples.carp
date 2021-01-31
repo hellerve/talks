@@ -1,0 +1,55 @@
+; helpers:
+
+(defmacro inspect [e] (s-expr (eval e)))
+
+; simple
+
+(defmacro if-not [condition expression] ; same as unless in stdlib
+  `(if %condition
+    ()
+    %expression))
+
+(defn test-if-not []
+  (if-not (= 1 2)
+    (println* "we can compare integers!")))
+
+; medium:
+
+(defmacro alias [name aliased]
+  (let [args (Introspect.arguments (eval aliased))]
+    (eval
+      `(defn %name %args
+        (%aliased %@(collect-into args list))))))
+
+(alias test-alias *)
+
+; complex:
+
+(defndynamic replacerfn [arg]
+  (let [obs (Symbol.str arg)]
+    (if (= "!" (String.prefix obs 1))
+      [(gensym-with arg) (Symbol.from (String.suffix obs 1))]
+      [arg arg])))
+
+(defndynamic generate-let [acc replacer]
+  (append acc [(list 'quote (car replacer)) (cadr replacer)]))
+
+(defndynamic generate-reverse-let [acc replacer]
+  (append acc [(cadr replacer) (list 'quote (car replacer))]))
+
+(defmacro defmacro! [name args body]
+  (let [replacer (map replacerfn args)
+        args (collect-into (map cadr replacer) array)
+        replacer (filter (fn [x] (/= (car x) (cadr x))) replacer)]
+      (eval
+        `(defmacro %name %args
+          %(list 'list '(quote let) (reduce generate-let [] replacer)
+            (list 'let (reduce generate-reverse-let [] replacer)
+                body))))))
+
+(defmacro! test-defmacro! [!y z] `[(%y %z) (%y %z)])
+
+(defn test-defmacro!-fn []
+  (test-defmacro!
+    (do (println* "hi") Int.inc)
+    (do (println* "bye") 2)))
