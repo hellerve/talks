@@ -1,6 +1,7 @@
 ; helpers:
 
 (defmacro inspect [e] (s-expr (eval e)))
+(defmacro macro-expand [e] (append '() (expand e)))
 
 ; simple
 
