@@ -28,6 +28,7 @@ Right now, the talks I’ve given/proposed are these:
 - [“All I have is a hammer, now give me your nails!” at EnthusiastiCon, June 2020](/enthusiasticon-2020)
 - [“Memory Vulnerabilities in Memory-Safe Languages” at the Information Security Meetup Berlin, August 2020](/security-meetup-berlin-august-2020)
 - [“Lisp Macros 101” at the Recurse Center (remote)](/recurse-february-2021)
+- [“Building a Brainfuck Cmpiler in  Carp” at Lambda Lounge, March 2021](/lambda-lounge-march-2021)
 
 ## Want me to speak?
 
