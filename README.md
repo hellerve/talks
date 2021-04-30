@@ -29,7 +29,7 @@ Right now, the talks I’ve given/proposed are these:
 - [“Memory Vulnerabilities in Memory-Safe Languages” at the Information Security Meetup Berlin, August 2020](/security-meetup-berlin-august-2020)
 - [“Lisp Macros 101” at the Recurse Center (remote)](/recurse-february-2021)
 - [“Building a Brainfuck Compiler in  Carp” at Lambda Lounge, March 2021](/lambda-lounge-march-2021)
-- [“?” at !!Con 2021 (proposed)](/bangbangcon-2021)
+- [“?” at !!Con 2021](/bangbangcon-2021) (Proposed)
 
 ## Want me to speak?
 
