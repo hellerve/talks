@@ -1,0 +1,514 @@
+\documentclass[aspectratio=1610,14pt]{beamer}
+\usepackage[ngerman]{babel}
+\usepackage{fontspec}
+\usepackage{tikz}
+\usepackage{calc}
+\usetikzlibrary{positioning, arrows.meta}
+
+% ------------------------------------------------------------------
+% Typography
+% ------------------------------------------------------------------
+\setsansfont{Helvetica Neue}[
+  UprightFont = * Light,
+  BoldFont    = * Bold,
+  ItalicFont  = * Light Italic,
+  BoldItalicFont = * Bold Italic,
+]
+\setmonofont{Menlo}[Scale=0.88]
+\renewcommand{\familydefault}{\sfdefault}
+
+% ------------------------------------------------------------------
+% Palette: slate ink, warm paper, copper accent
+% ------------------------------------------------------------------
+\definecolor{paper}{HTML}{F7F5F0}
+\definecolor{ink}{HTML}{15202B}
+\definecolor{mute}{HTML}{6B6E76}
+\definecolor{rule}{HTML}{D9D4C7}
+\definecolor{copper}{HTML}{B85C2A}
+\definecolor{steel}{HTML}{2C4A5C}
+
+% ------------------------------------------------------------------
+% Strip beamer chrome
+% ------------------------------------------------------------------
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}{}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{itemize item}{\color{copper}\textbullet}
+\setbeamertemplate{itemize subitem}{\color{copper}\textendash}
+\setbeamercolor{normal text}{fg=ink, bg=paper}
+\setbeamercolor{structure}{fg=copper}
+\setbeamercolor{alerted text}{fg=copper}
+\setbeamercolor{itemize item}{fg=copper}
+\setbeamerfont{itemize/enumerate body}{size=\normalsize}
+
+% ------------------------------------------------------------------
+% Frame title: large, with a thin copper rule and a small slide counter
+% ------------------------------------------------------------------
+\setbeamerfont{frametitle}{family=\sffamily, series=\bfseries, size=\Large}
+\setbeamercolor{frametitle}{fg=ink, bg=paper}
+\setbeamertemplate{frametitle}{%
+  \vspace*{1.4em}%
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=north west, inner sep=0pt, text depth=0pt]
+      at ([xshift=0.9cm, yshift=-0.9cm]current page.north west)
+      {\usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle};
+    \draw[copper, line width=1.2pt]
+      ([xshift=0.9cm, yshift=-1.95cm]current page.north west)
+      -- ++(1.2cm, 0);
+    \node[anchor=north east, inner sep=0pt, font=\sffamily\scriptsize, text=mute]
+      at ([xshift=-0.9cm, yshift=-1.0cm]current page.north east)
+      {\insertframenumber};
+  \end{tikzpicture}%
+  \vspace{0.4em}%
+}
+
+% ------------------------------------------------------------------
+% Section page: full-bleed slate with big numeral + section name
+% ------------------------------------------------------------------
+\AtBeginSection[]{%
+  \begingroup
+  \setbeamercolor{background canvas}{bg=ink}
+  \begin{frame}[plain, noframenumbering]
+    \begin{tikzpicture}[remember picture, overlay]
+      \node[anchor=west, font=\sffamily\bfseries\fontsize{320}{320}\selectfont,
+            text=copper, opacity=0.18]
+        at ([xshift=-0.5cm]current page.west)
+        {\insertsectionnumber};
+      \node[anchor=center, text=paper, font=\sffamily\bfseries\fontsize{32}{38}\selectfont,
+            text width=0.78\paperwidth, align=center]
+        at (current page.center)
+        {\hyphenpenalty=10000\exhyphenpenalty=10000\hyphenchar\font=-1\relax
+         \tolerance=9999\emergencystretch=3em\relax\insertsection};
+      \node[anchor=south west, font=\sffamily\scriptsize]
+        at ([xshift=0.9cm, yshift=0.7cm]current page.south west)
+        {\textcolor{copper}{\rule[0.6ex]{1.2cm}{0.8pt}}\textcolor{paper}{\quad Rack'n'Stack 2026 \quad \textbullet \quad Veit Heller}};
+    \end{tikzpicture}
+  \end{frame}
+  \endgroup
+}
+
+% ------------------------------------------------------------------
+% Title page
+% ------------------------------------------------------------------
+\setbeamertemplate{title page}{%
+  \begin{tikzpicture}[remember picture, overlay]
+    % Copper accent block, top-left
+    \fill[copper] ([xshift=0cm, yshift=0cm]current page.north west)
+      rectangle ([xshift=0.45cm, yshift=-\paperheight]current page.north west);
+    % Title
+    \node[anchor=north west, text=ink, font=\sffamily\bfseries\fontsize{34}{40}\selectfont,
+          text width=0.85\paperwidth, inner sep=0pt]
+      at ([xshift=1.4cm, yshift=-1.5cm]current page.north west)
+      {\inserttitle};
+    % Subtitle
+    \node[anchor=north west, text=steel, font=\sffamily\fontsize{16}{20}\selectfont,
+          text width=0.78\paperwidth, inner sep=0pt]
+      at ([xshift=1.4cm, yshift=-5.0cm]current page.north west)
+      {\insertsubtitle};
+    % Copper rule between subtitle and credits
+    \draw[copper, line width=1.2pt]
+      ([xshift=1.4cm, yshift=2.0cm]current page.south west)
+      -- ([xshift=1.4cm+1.5cm, yshift=2.0cm]current page.south west);
+    % Author block (bottom-left)
+    \node[anchor=south west, text=ink, font=\sffamily\bfseries\normalsize, inner sep=0pt]
+      at ([xshift=1.4cm, yshift=1.25cm]current page.south west)
+      {\insertauthor};
+    \node[anchor=south west, text=mute, font=\sffamily\footnotesize, inner sep=0pt]
+      at ([xshift=1.4cm, yshift=0.7cm]current page.south west)
+      {Port Zero};
+    % Conference + date, bottom-right
+    \node[anchor=south east, text=mute, font=\sffamily\footnotesize, inner sep=0pt]
+      at ([xshift=-1.4cm, yshift=1.25cm]current page.south east)
+      {Rack'n'Stack 2026};
+    \node[anchor=south east, text=mute, font=\sffamily\footnotesize, inner sep=0pt]
+      at ([xshift=-1.4cm, yshift=0.7cm]current page.south east)
+      {Nürnberg \textbullet{} 21.\,April 2026};
+  \end{tikzpicture}%
+}
+
+% Background colour for normal frames
+\setbeamercolor{background canvas}{bg=paper}
+
+% ------------------------------------------------------------------
+% Slide helpers
+% ------------------------------------------------------------------
+\newcommand{\hero}[1]{%
+  \vfill
+  \begin{center}
+    {\sffamily #1\par}
+  \end{center}
+  \vfill
+}
+\newcommand{\subhero}[1]{%
+  \begin{center}
+    {\color{mute}\sffamily #1\par}
+  \end{center}
+}
+\newcommand{\copperaccent}[1]{\textcolor{copper}{\textbf{#1}}}
+\newcommand{\Statt}{\textcolor{mute}{\itshape Statt:}\,}
+\newcommand{\Besser}{\textcolor{copper}{\bfseries Besser:}\,}
+
+\title{Von der Cloud\\ins Rack}
+\subtitle{Wie Netzautomatisierung souveräne RZ-Umgebungen ermöglicht}
+\date{21.\,April 2026}
+\author{Veit Heller}
+\institute{Port Zero}
+\begin{document}
+  \begin{frame}[plain, noframenumbering]
+    \titlepage
+  \end{frame}
+
+  % ------------------------------------------------------------------
+  \section{Das Problem}
+  % ~ 4 min
+  % ------------------------------------------------------------------
+  \begin{frame}{Warum überhaupt zurück?}
+    \begin{itemize}
+      \item Data Act
+      \item NIS2
+      \item DORA
+      \item AI Act
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Der Komfort der Hyperscaler}
+    \begin{itemize}
+      \item Self-Service-Portale
+      \item APIs überall
+      \item Reproduzierbare Deployments
+      \item Klare Verantwortlichkeiten
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Die Angst}
+    \vfill
+    \begin{center}
+      {\sffamily\itshape „Könnt ihr mir mal ein VLAN machen?“\par}
+    \end{center}
+    \vfill
+    \subhero{Bild im Kopf: zurück in die 2000er.}
+  \end{frame}
+
+  \begin{frame}{Die eigentliche Frage}
+    \vfill
+    \begin{center}
+      {\color{mute}\itshape Nicht:}\\[0.2em]
+      \textbf{Wie automatisiere ich alles?}
+
+      \vspace{1.4em}
+      {\color{copper}\itshape Sondern:}\\[0.2em]
+      \textbf{Warum scheitern die meisten Projekte,\\
+      obwohl die Technik längst gelöst ist?}
+    \end{center}
+    \vfill
+  \end{frame}
+
+  % ------------------------------------------------------------------
+  \section{Die Technik ist das einfache Problem}
+  % ~ 5 min
+  % ------------------------------------------------------------------
+  \begin{frame}{Die Technik ist das einfache Problem}
+    \hero{Automatisierungs-Pipelines\\
+    bauen wir seit Jahren.}
+  \end{frame}
+
+  \begin{frame}{Architektur-Überblick}
+    \vspace{0.8em}
+    \begin{center}
+      \resizebox{0.98\textwidth}{!}{%
+      \begin{tikzpicture}[
+        box/.style={
+          draw=ink, line width=0.8pt, rounded corners=2pt,
+          minimum width=2.6cm, minimum height=1.6cm,
+          align=center, font=\sffamily, fill=paper, text=ink
+        },
+        inbox/.style={
+          draw=ink, line width=0.8pt, rounded corners=2pt,
+          minimum width=2.6cm, minimum height=0.85cm,
+          align=center, font=\sffamily, fill=paper, text=ink
+        },
+        arrow/.style={-{Stealth[length=2.5mm]}, line width=1pt, copper}
+      ]
+        \node[box] (sot)  {Source\\of Truth};
+        \node[box, right=1.3cm of sot]  (auto) {Automation};
+        \node[box, right=1.3cm of auto] (pipe) {Pipeline};
+
+        \node[inbox] (op) at ([xshift=-2.8cm, yshift= 0.85cm]sot.west) {Ticket-System};
+        \node[inbox, below=0.6cm of op] (cp) {Kundenportal};
+        \node[font=\sffamily, text=ink, below=0.4cm of cp] {…};
+
+        \draw[arrow] (op.east) -- (sot.west);
+        \draw[arrow] (cp.east) -- (sot.west);
+
+        \draw[arrow] (sot) -- (auto);
+        \draw[arrow] (auto) -- (pipe);
+      \end{tikzpicture}%
+      }
+    \end{center}
+  \end{frame}
+
+  % --- Source of Truth ---
+  \begin{frame}{Source of Truth: DCIM/IPAM}
+    Was modelliert wird:
+    \begin{itemize}
+      \item Standorte, Racks, Geräte
+      \item IP-Bereiche, VLANs
+      \item Mandanten, Services
+    \end{itemize}
+    \vspace{1em}
+    {\color{mute}\itshape Beispiele: Netbox, Nautobot.}
+  \end{frame}
+
+  % --- Automatisierung ---
+  \begin{frame}{Automatisierung als Ausführung}
+    \begin{itemize}
+      \item Desired State, idempotent
+      \item Config Compliance
+      \item Drift Detection
+      \item Pre- und Post-Checks
+    \end{itemize}
+    \vspace{1em}
+    {\color{mute}\itshape Beispiele: Ansible, Nornir.}
+  \end{frame}
+
+  % --- Pipelines ---
+  \begin{frame}{Pipelines als Kontrollschicht}
+    \vfill
+    \begin{center}
+      Request \,{\color{copper}$\to$}\, Änderung \,{\color{copper}$\to$}\, Review \,{\color{copper}$\to$}\, Rollout
+    \end{center}
+    \vfill
+    {\color{mute}\itshape Merge Request = Change Request. Linting, Dry-Run, Staging. Rollback durch Revert.}
+  \end{frame}
+
+  \begin{frame}{Praxis: WOBCOM}
+    \vfill
+    \begin{center}
+      Mit WOBCOM, Stadtwerke Wolfsburg.\\[0.6em]
+      Vom Inventar zum ersten\\
+      automatisierten Rollout.\\[0.6em]
+      In 6 Monaten.
+    \end{center}
+    \vfill
+    {\color{mute}\itshape „Automate yourself within six months“. DENOG 2019, mit Christian Dieckhoff.\\
+    \texttt{media.ccc.de/v/denog11-26-}\\
+    \texttt{automate-yourself-within-six-months}}
+  \end{frame}
+
+  % ------------------------------------------------------------------
+  \section{Warum Projekte trotzdem scheitern}
+  % ~ 4 min
+  % ------------------------------------------------------------------
+  \begin{frame}{Trotzdem scheitern die meisten}
+    \hero{Die Pipeline steht.\\
+    Der Workflow nicht.}
+  \end{frame}
+
+  \begin{frame}{Silo: IT für IT}
+    \hero{Die IT automatisiert\\
+    für die IT.}
+  \end{frame}
+
+  \begin{frame}{Falsche Abstraktionsebene}
+    \hero{Wir bauen Tooling.\\
+    Die Teams haben Prozesse.}
+  \end{frame}
+
+  \begin{frame}{Keine Anbindung ans Geschäft}
+    \begin{itemize}
+      \item Das Projekt lebt im IT-Bereich.
+      \item Niemand fragt die Fachteams.
+      \item Schmerzhafte Workflows bleiben schmerzhaft.
+    \end{itemize}
+  \end{frame}
+
+  % ------------------------------------------------------------------
+  \section{Daten folgen Produkten und Prozessen}
+  % ~ 8 min
+  % ------------------------------------------------------------------
+  \begin{frame}{Cloud als Produkt}
+    \hero{Cloud-Komfort ist Produktdesign.\\
+    Die Technik kam danach.}
+  \end{frame}
+
+  \begin{frame}{Die Eigenschaften}
+    \begin{itemize}
+      \item Definierte Produkte und Services
+      \item Self-Service, API-first
+      \item Reproduzierbarkeit
+      \item Nachvollziehbarkeit
+      \item Klare Verantwortlichkeiten
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Was ist euer Produkt?}
+    \vfill
+    \begin{center}
+      \Statt „VLAN einrichten“
+
+      \vspace{1.4em}
+      \Besser „Mandantennetz bereitstellen“
+    \end{center}
+    \vfill
+  \end{frame}
+
+  \begin{frame}{Vor der Technik}
+    Drei Fragen, bevor irgendetwas automatisiert wird:
+    \begin{itemize}
+      \item Was sind unsere Produkte und Services?
+      \item Was sind die Prozesse dahinter?
+      \item Wo lohnt sich Automatisierung, wo nicht?
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Vom impliziten zum expliziten Prozess}
+    \vfill
+    \begin{center}
+      Aufschreiben \,{\color{copper}$\to$}\, Vereinfachen \,{\color{copper}$\to$}\, Automatisieren
+    \end{center}
+    \vfill
+    {\color{mute}\itshape Automatisierung ist der letzte Schritt, nicht der erste.}
+  \end{frame}
+
+  \begin{frame}{}
+    \vfill
+    \begin{center}
+      \begin{minipage}{0.82\paperwidth}
+        \centering\itshape
+        „Wenn Sie einen scheiß Prozess digitalisieren,\\
+        haben Sie einen scheiß digitalen Prozess!“
+      \end{minipage}
+    \end{center}
+    \vfill
+    \begin{flushright}
+      {\color{mute}— Thorsten Dirks, ehem. Vorstandsvorsitzender Telefónica Deutschland}
+    \end{flushright}
+  \end{frame}
+
+  \begin{frame}{Wo Automatisierung Sinn macht}
+    Kriterien:
+    \begin{itemize}
+      \item Wie häufig?
+      \item Wie fehleranfällig?
+      \item Wie reproduzierbar?
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Nicht alles. Nicht sofort.}
+    \begin{itemize}
+      \item Was dem Geschäft weh tut, nicht nur der IT.
+      \item Die häufigsten 3 bis 5 Vorgänge zuerst.
+      \item Sonderfälle bleiben manuell. Bewusst.
+      \item Edge Cases später, wenn der Kern steht.
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Prozesse definieren Services}
+    \hero{Der Servicekatalog ist kein Dokument.\\
+    Er ist das, was die Pipelines können.}
+  \end{frame}
+
+  % ------------------------------------------------------------------
+  \section{Compliance als Nebenprodukt}
+  % ~ 4 min
+  % ------------------------------------------------------------------
+  \begin{frame}{Change Management wird einfacher}
+    \vfill
+    \begin{center}
+      \renewcommand{\arraystretch}{1.5}
+      \begin{tabular}{r @{\;\textcolor{copper}{$=$}\;} l}
+        Merge Request    & Change Record \\
+        Review           & Approval \\
+        Pipeline-Log     & Ausführungsnachweis \\
+        Source of Truth  & Dokumentation \\
+      \end{tabular}
+    \end{center}
+    \vfill
+  \end{frame}
+
+  \begin{frame}{Audits und Zertifizierungen}
+    \begin{itemize}
+      \item ISO 27001, BSI IT-Grundschutz, SOC 2
+      \item Source of Truth, Git, Pipeline. Lückenlose Spur.
+      \item Drift Detection als kontinuierlicher Nachweis.
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Dokumentation als Nebenprodukt}
+    \hero{Wenn die Source of Truth stimmt,\\
+    ist die Doku aktuell.}
+  \end{frame}
+
+  % ------------------------------------------------------------------
+  \section{Brownfield-Muster}
+  % ~ 4 min
+  % ------------------------------------------------------------------
+  \begin{frame}{Kein Greenfield nötig}
+    \hero{Brownfield ist nicht das Problem.\\
+    Brownfield ist der Normalfall.}
+  \end{frame}
+
+  \begin{frame}{Schritt 1: Inventar und Modell}
+    \begin{itemize}
+      \item Bestand erfassen.
+      \item DCIM/IPAM befüllen.
+      \item Muss nicht perfekt sein.
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Schritt 2: Ein Prozess, Ende zu Ende}
+    \begin{itemize}
+      \item Einen Prozess sauber durchautomatisieren.
+      \item Tief statt breit.
+      \item Quick Win, Vertrauen aufbauen.
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Schritt 3: Ausweiten}
+    \vspace{0.3em}
+    \begin{itemize}
+      \item Pipeline, Review, nächste Prozesse.
+      \item Self-Service für Kund:innen und interne Teams.
+      \item Das Modell wächst mit.
+    \end{itemize}
+  \end{frame}
+
+  % ------------------------------------------------------------------
+  \section{Fazit}
+  % ~ 3 min
+  % ------------------------------------------------------------------
+  \begin{frame}{Das schwere Problem}
+    \hero{Die Technik ist gelöst.\\
+    Die Prozesse müssen folgen.}
+  \end{frame}
+
+  \begin{frame}{Rückführung als Upgrade}
+    \hero{Souveräne Infrastruktur fühlt sich wie Cloud an,\\
+    wenn die IT nicht allein automatisiert.}
+  \end{frame}
+  {
+    \setbeamercolor{background canvas}{bg=ink}
+    \begin{frame}[plain, noframenumbering]
+      \begin{tikzpicture}[remember picture, overlay]
+        \node[anchor=west, text=paper, font=\sffamily\bfseries\fontsize{72}{80}\selectfont]
+          at ([xshift=1.4cm]current page.west)
+          {Danke.};
+        \node[anchor=west, text=copper, font=\sffamily\fontsize{28}{34}\selectfont]
+          at ([xshift=1.4cm, yshift=-1.8cm]current page.west)
+          {Fragen?};
+        \node[anchor=south west, text=mute, font=\sffamily\footnotesize]
+          at ([xshift=1.4cm, yshift=1.55cm]current page.south west)
+          {Veit Heller \textbullet{} Port Zero};
+        \node[anchor=south west, text=mute, font=\sffamily\footnotesize]
+          at ([xshift=1.4cm, yshift=0.95cm]current page.south west)
+          {\texttt{veit@veitheller.de}};
+        \node[anchor=south east, text=mute, font=\sffamily\footnotesize]
+          at ([xshift=-1.4cm, yshift=1.55cm]current page.south east)
+          {Slides};
+        \node[anchor=south east, text=mute, font=\sffamily\footnotesize]
+          at ([xshift=-1.4cm, yshift=0.95cm]current page.south east)
+          {\texttt{github.com/hellerve/talks}};
+      \end{tikzpicture}
+    \end{frame}
+  }
+\end{document}
