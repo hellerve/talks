@@ -1,0 +1,3 @@
+Most devs, when confronted with types, only have to worry about "static vs dynamic". In this talk, we will demystify all those languages you’ve heard about for their weird type systems (Haskell, anyone?) as well as talk about type systems you might never have heard of, and discover why they’re awesome, useful, and solve real bugs! We’ll start with Rust’s affine ownership and Agda’s dependent types before touring a few out-there ideas.
+
+We’ll build a solid mental model for modern production type systems as well as build a foundation for you to dive deeper into more obscure type system research if you so desire. We’ll build tiny runnable models, explore implementations, and you’ll leave with frameworks, resources, and a roadmap to go deeper, without needing a PhD.

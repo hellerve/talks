@@ -1,0 +1,174 @@
+  % ==================================================================
+  \section{beyond static vs dynamic}
+  % ~ 4 min --- earn the thesis, don't just state it
+  % ==================================================================
+  \begin{frame}{the menu you were handed}
+    \begin{itemize}
+      \item static vs dynamic.
+      \item strong vs weak.
+      \item \textcolor{mute}{most of us stopped there.}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{the usual two axes}
+    \hero{static vs dynamic is about \emph{when} checks run.\\[0.3em]
+    strong vs weak barely has a consistent meaning.}
+    \subhero{neither is the interesting axis.}
+  \end{frame}
+
+  \begin{frame}{a better question}
+    \hero{i think it's more useful to ask\\[0.3em]
+    \copperaccent{what a type can say} about your program.}
+  \end{frame}
+
+  \begin{frame}{what can a type say?}
+    \begin{itemize}
+      \item[\textcolor{mute}{\textbar}] \textcolor{mute}{“this is an integer.”}
+      \item[\textcolor{mute}{\textbar}] \textcolor{mute}{“this is a list of strings.”}
+      \item “this integer is never zero.”
+      \item “this list is non-empty, so \texttt{head} is safe.”
+      \item “this socket has already been closed.”
+      \item “this function touches the disk.”
+      \item “send a request, then receive exactly one reply.”
+    \end{itemize}
+    \vspace{0.4em}
+    \subhero{the greyed-out two, you say every day. the rest is today's talk.}
+  \end{frame}
+
+  \begin{frame}{the plan}
+    \begin{itemize}
+      \item five things a type can say, \copperaccent{from familiar to strange}.
+      \item the first is probably familiar. the last will not be.
+      \item a roadmap, so you leave with somewhere to go.
+    \end{itemize}
+    \subhero{one trip to the terminal, to build a type checker ourselves.}
+  \end{frame}
+
+  % ==================================================================
+  \section{five things a type can say}
+  % ~ 14 min --- one ladder, five rungs; rung 2 (refinement) is live
+  % ==================================================================
+  % --- rung 1: ownership in rust, the warmup ------------------------
+  \begin{frame}{ownership}
+    \hero{“this value has \copperaccent{exactly one owner}.”}
+    \subhero{use it once, then move it or borrow it. rust's borrow checker is
+    one of these, whether or not you have met it.}
+  \end{frame}
+
+  \begin{frame}[fragile]{can't close it twice}
+    \vfill
+\begin{lstlisting}[morekeywords={let}]
+let c = Conn::open("socket-7");
+c.close();
+c.close();
+\end{lstlisting}
+    \vskip6pt
+    {\ttfamily\small\textcolor{copper}{error[E0382]: use of moved value: `c`}}\\[2pt]
+    {\ttfamily\small\textcolor{mute}{note: `close` takes ownership of the receiver `self`, which moves `c`}}
+    \vfill
+    \subhero{close consumes the handle, so a second use can't typecheck.}
+  \end{frame}
+
+  \begin{frame}{that's an “affine” type}
+    \begin{itemize}
+      \item \textbf{linear}: use a value \emph{exactly} once.
+      \item \textbf{affine}: use it \emph{at most} once.
+      \item \textbf{rust}: affine, unless a type is \texttt{Copy} (values safe to duplicate).
+    \end{itemize}
+    \subhero{a large class of use-after-free, double-free, and data-race bugs
+    becomes a compile error. \texttt{Send} and \texttt{Sync} carry thread-safety in the type.}
+  \end{frame}
+
+  % --- rung 2: refinement, the live build --------------------------
+  \livecode{let's write a type checker.}
+
+  \begin{frame}[t]{a real type system}
+    \vskip0.09\paperheight
+    \cwstat{55}{lines, no solver}
+    \vskip0.07\paperheight
+    {\color{cwRule}\hrule height0.6pt}\vskip10pt
+    {\cwhankenbody\color{cwFaint}\small that is a working refinement type checker, in plain interval arithmetic. real systems (liquid haskell, f\textsuperscript{*}) hand the subtyping to an smt solver.}
+  \end{frame}
+
+  \begin{frame}{effect systems}
+    \claim{“this function touches the disk.”}
+      {readFile : Path ->\{IO\} Text}
+      {unison}
+      {in koka, eff, and unison, the effect rides in the type next to the return value.}
+  \end{frame}
+
+  \begin{frame}{session types}
+    \claim{“the worker can't get a job before it registers.”}
+      {!Register ; ?Job ; !Result ; Close}
+      {freest}
+      {two concurrent processes talking over one channel. in freest the order is part of the channel's type, so sending them out of order won't compile.}
+  \end{frame}
+
+  \begin{frame}{dependent types}
+    \claim{“this list is non-empty, so \texttt{head} is always safe.”}
+      {head : Vec A (suc n) $\to$ A}
+      {agda}
+      {types can depend on \emph{values}. \texttt{Vec A n} carries its length,
+       so \texttt{head []} does not typecheck.}
+  \end{frame}
+
+  \begin{frame}{proofs as programs}
+    \claim{“concatenation adds the lengths.”}
+      {\_++\_ : Vec A m $\to$ Vec A n $\to$ Vec A (m + n)}
+      {agda}
+      {the signature is the spec, and the two-line body is a proof of it,
+       checked at compile time.}
+  \end{frame}
+
+  % --- synthesis: the five rungs, one move -------------------------
+  \begin{frame}[t]{five claims, side by side}
+    \vskip8pt
+    \footnotesize
+    \renewcommand{\arraystretch}{1.4}%
+    \arrayrulecolor{cwRule}\setlength{\arrayrulewidth}{0.6pt}%
+    \noindent\begin{tabular}{@{}>{\raggedright\arraybackslash}m{0.17\textwidth}
+                              >{\raggedright\arraybackslash}m{0.33\textwidth}
+                              >{\columncolor{cwPanel}\raggedright\arraybackslash}m{0.36\textwidth}@{}}
+      {\cwhankenbody\color{cwMuted}} & {\cwhankenbody\color{cwMuted}the bug, at runtime} & {\cwhankenbody\color{cwInk}\bfseries caught at compile time} \\
+      \hline
+      {\cwhankenbody\color{cwFaint}ownership}  & {\cwhankenbody use after close, double free} & {\cwhankenbody moved, so reuse won't compile} \\
+      \hline
+      {\cwhankenbody\color{cwFaint}refinement} & {\cwhankenbody divide by zero} & {\cwhankenbody argument must be non-zero} \\
+      \hline
+      {\cwhankenbody\color{cwFaint}effects}    & {\cwhankenbody a hidden disk write} & {\cwhankenbody the effect is in the signature} \\
+      \hline
+      {\cwhankenbody\color{cwFaint}session}    & {\cwhankenbody a message out of order} & {\cwhankenbody wrong message won't compile} \\
+      \hline
+      {\cwhankenbody\color{cwFaint}dependent}  & {\cwhankenbody \texttt{head []}, off by one} & {\cwhankenbody the length lives in the type} \\
+    \end{tabular}
+  \end{frame}
+
+  % ==================================================================
+  \section{a roadmap}
+  % ~ 3 min
+  % ==================================================================
+  \begin{frame}{pick an axis, not a language}
+    \begin{itemize}
+      \item resource safety $\to$ rust.
+      \item proof $\to$ agda, idris, lean.
+      \item effects $\to$ koka, unison.
+      \item contracts $\to$ liquid haskell, f\textsuperscript{*}.
+    \end{itemize}
+    \subhero{you don't need a phd to use any of these in anger.}
+  \end{frame}
+
+  \begin{frame}{resources}
+    \begin{itemize}
+      \item \textit{types and programming languages}, pierce.
+      \item \textit{programming language foundations in agda}.
+      \item \textit{the little typer}, friedman \& christiansen.
+    \end{itemize}
+    \subhero{none of them will melt your brain.}
+  \end{frame}
+
+  \begin{frame}{the takeaway}
+    \hero{a type system is a language\\
+    for saying what's true.\\[0.4em]
+    pick one that lets you say\\
+    \copperaccent{what you mean}.}
+  \end{frame}

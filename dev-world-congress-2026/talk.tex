@@ -1,0 +1,111 @@
+% talk.tex — the deck, rendered through the Cyberwitchery beamer theme.
+% Slide body lives in content.tex.
+%
+% Build:  make     (or: xelatex talk)
+\documentclass[aspectratio=1610,14pt]{beamer}
+
+\usetheme{Cyberwitchery}        % dark; add [light] for the light palette
+
+% ------------------------------------------------------------------
+% Map the old deck's accent-colour names onto the Cyberwitchery palette,
+% so content.tex (which references copper/steel/mute/ink/paper/rule) renders
+% unchanged.
+% ------------------------------------------------------------------
+\colorlet{copper}{cwTeal}
+\colorlet{steel}{cwTeal}
+\colorlet{mute}{cwFaint}
+\colorlet{ink}{cwInk}
+\colorlet{paper}{cwGround}
+\colorlet{rule}{cwRule}
+
+% ------------------------------------------------------------------
+% Readability: ordinary explanatory bullets read as prose, not mono, so the
+% mono voice is reserved for titles, labels, code, short claims, and emphasis.
+% (The theme already scales \cwhanken to the mono and routes its bold to mono
+% bold; \cwhankenbody is just a name this deck's content still references.)
+% ------------------------------------------------------------------
+\newcommand{\cwhankenbody}{\cwhanken}
+\setbeamertemplate{itemize/enumerate body begin}{\cwhankenbody}
+\setbeamertemplate{itemize/enumerate subbody begin}{\cwhankenbody}
+\setbeamertemplate{itemize/enumerate subsubbody begin}{\cwhankenbody}
+
+% ------------------------------------------------------------------
+% The five content macros, reimplemented in the theme's idiom.
+% (Same names/signatures as talk.tex, so the shared body is verbatim.)
+% ------------------------------------------------------------------
+% Emphasis: bold + teal in the surrounding face. In a Hanken bullet that bold is
+% routed to JetBrains Mono Bold (via cwhankenbody), so it stays mono and sized to
+% the body; in a mono hero it is full-size mono bold. No fixed \sffamily, which
+% would force full-size mono and tower over scaled body text.
+\newcommand{\copperaccent}[1]{\textcolor{cwTeal}{\textbf{#1}}}
+
+\newcommand{\hero}[1]{%
+  \vfill
+  \begin{center}{\bfseries\large\color{cwInk} #1\par}\end{center}
+  \vfill}
+
+\newcommand{\subhero}[1]{%
+  \begin{center}{\cwhankenbody\color{cwMuted} #1\par}\end{center}}
+
+% A tour stop: code on top, a small note of which notation it is, then the
+% claim and the attribution.  #1 claim  #2 code  #3 notation  #4 attribution
+\newcommand{\claim}[4]{%
+  \vfill
+  \begin{center}
+    {\ttfamily\large\color{cwTeal} #2\par}
+    \vspace{0.35em}
+    {\cwhankenbody\footnotesize\color{cwMuted} #3\par}
+    \vspace{1.0em}
+    {\bfseries\Large\color{cwInk} #1\par}
+    \vspace{1.4em}
+    {\cwhankenbody\footnotesize\color{cwFaint} #4\par}
+  \end{center}
+  \vfill}
+
+% Full-bleed live-coding cue.
+\newcommand{\livecode}[1]{%
+  \begin{frame}[plain, noframenumbering]
+    \begin{tikzpicture}[remember picture, overlay]
+      \node[anchor=west, text=cwTeal, font=\bfseries\large]
+        at ([xshift=0.06\paperwidth, yshift=2.6cm]current page.west)
+        {$\rightarrow$\ live};
+      \node[anchor=west, text=cwInk, font=\bfseries\fontsize{40}{48}\selectfont,
+            text width=0.82\paperwidth]
+        at ([xshift=0.06\paperwidth, yshift=-0.2cm]current page.west)
+        {#1};
+    \end{tikzpicture}
+  \end{frame}}
+
+% ------------------------------------------------------------------
+\title{type systems\\ you might not know}
+\subtitle{(but will love)}
+\author{veit heller}
+\institute{cyberwitchery lab}
+\date{2026}
+
+\begin{document}
+
+  % --- title : faint logo on the right, no footline ---
+  {\setbeamertemplate{footline}{}
+  \begin{frame}[plain]
+    \cwlogoright[cwGhost]{0.42\paperheight}%
+    \titlepage
+  \end{frame}}
+
+  \input{content}
+
+  % --- closing ---
+  {\setbeamertemplate{footline}{}
+  \begin{frame}[plain]
+    \cwlogoright[cwInk]{0.42\paperheight}%
+    \vskip0.22\paperheight
+    \begin{minipage}{0.62\textwidth}
+      {\usebeamerfont{title}\color{cwInk}thanks.}\par\vskip12pt
+      {\cwhanken\large\color{cwTeal}questions?}\par
+      \vskip0.10\paperheight
+      {\cwhanken\color{cwMuted}veit heller \quad \texttt{veit@veitheller.de}}\\[5pt]
+      {\cwhanken\color{cwFaint}slides: \texttt{github.com/hellerve/talks}}
+    \end{minipage}
+  \end{frame}}
+
+\end{document}
