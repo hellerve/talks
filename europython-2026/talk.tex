@@ -1,0 +1,104 @@
+% talk.tex — the deck, rendered through the Cyberwitchery beamer theme.
+% Slide body lives in content.tex.
+%
+% Build:  make     (or: xelatex talk)
+\documentclass[aspectratio=1610,14pt]{beamer}
+
+\usetheme{Cyberwitchery}        % dark; add [light] for the light palette
+\renewcommand{\cwfootleft}{cyber witchery}
+
+% ------------------------------------------------------------------
+% Map the old deck's accent-colour names onto the Cyberwitchery palette,
+% so content.tex (which references copper/steel/mute/ink/paper/rule) renders
+% unchanged.
+% ------------------------------------------------------------------
+\colorlet{copper}{cwTeal}
+\colorlet{steel}{cwTeal}
+\colorlet{mute}{cwFaint}
+\colorlet{ink}{cwInk}
+\colorlet{paper}{cwGround}
+\colorlet{rule}{cwRule}
+
+% ------------------------------------------------------------------
+% Readability: ordinary explanatory bullets read as prose, not mono, so the
+% mono voice is reserved for titles, labels, code, short claims, and emphasis.
+% ------------------------------------------------------------------
+\newcommand{\cwhankenbody}{\cwhanken}
+\setbeamertemplate{itemize/enumerate body begin}{\cwhankenbody}
+\setbeamertemplate{itemize/enumerate subbody begin}{\cwhankenbody}
+\setbeamertemplate{itemize/enumerate subsubbody begin}{\cwhankenbody}
+
+% ------------------------------------------------------------------
+% The content macros, in the theme's idiom.
+% ------------------------------------------------------------------
+% Emphasis: bold + teal in the surrounding face.
+\newcommand{\copperaccent}[1]{\textcolor{cwTeal}{\textbf{#1}}}
+
+\newcommand{\hero}[1]{%
+  \vfill
+  \begin{center}{\bfseries\large\color{cwInk} #1\par}\end{center}
+  \vfill}
+
+\newcommand{\subhero}[1]{%
+  \begin{center}{\cwhankenbody\color{cwMuted} #1\par}\end{center}}
+
+% A formula slide: the formula is the hero, then its purpose, then the
+% definitions of its symbols (kept legible, not a footnote).
+\newcommand{\claim}[3]{%
+  \vfill
+  \begin{center}
+    {\ttfamily\Large\color{cwTeal} #2\par}
+    \vspace{1.2em}
+    {\cwhankenbody\large\color{cwInk} #1\par}
+    \vspace{1.3em}
+    {\cwhankenbody\small\color{cwMuted} #3\par}
+  \end{center}
+  \vfill}
+
+% Full-bleed live-coding cue.
+\newcommand{\livecode}[1]{%
+  \begin{frame}[plain, noframenumbering]
+    \begin{tikzpicture}[remember picture, overlay]
+      \node[anchor=west, text=cwTeal, font=\bfseries\large]
+        at ([xshift=0.06\paperwidth, yshift=2.6cm]current page.west)
+        {$\rightarrow$\ live};
+      \node[anchor=west, text=cwInk, font=\bfseries\fontsize{40}{48}\selectfont,
+            text width=0.82\paperwidth]
+        at ([xshift=0.06\paperwidth, yshift=-0.2cm]current page.west)
+        {#1};
+    \end{tikzpicture}
+  \end{frame}}
+
+% ------------------------------------------------------------------
+\title{ai architecture katas}
+\subtitle{learning by building small models in plain python}
+\author{veit heller}
+\institute{cyberwitchery lab}
+\date{2026}
+
+\begin{document}
+
+  % --- title : faint logo on the right, no footline ---
+  {\setbeamertemplate{footline}{}
+  \begin{frame}[plain]
+    \cwlogoright[cwGhost]{0.42\paperheight}%
+    \titlepage
+  \end{frame}}
+
+  \input{content}
+
+  % --- closing ---
+  {\setbeamertemplate{footline}{}
+  \begin{frame}[plain]
+    \cwlogoright[cwInk]{0.42\paperheight}%
+    \vskip0.22\paperheight
+    \begin{minipage}{0.62\textwidth}
+      {\usebeamerfont{title}\color{cwInk}thanks.}\par\vskip12pt
+      {\cwhanken\large\color{cwTeal}questions?}\par
+      \vskip0.10\paperheight
+      {\cwhanken\color{cwMuted}veit heller \quad \texttt{veit@veitheller.de}}\\[5pt]
+      {\cwhanken\color{cwFaint}slides: \texttt{github.com/hellerve/talks}}
+    \end{minipage}
+  \end{frame}}
+
+\end{document}

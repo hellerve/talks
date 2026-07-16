@@ -1,0 +1,21 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.nav
+*.snm
+*.toc
+*.vrb
+*.out
+*.xdv
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Python
+__pycache__/
+*.pyc
+.mypy_cache/
+
+# Editor / OS / local
+.claude/settings.local.json
+.DS_Store

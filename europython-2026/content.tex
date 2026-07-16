@@ -1,0 +1,230 @@
+  % ==================================================================
+  \section{why tiny models?}
+  % ==================================================================
+	\begin{frame}{you (probably) have already used one}
+    \begin{itemize}
+      \item a chatbot, a translator, code completion.
+      \item under each is a neural network: arrays of parameters and matrix
+				multiplication.
+      \item \textcolor{mute}{you could build one.}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{frameworks are for production code}
+    \hero{for learning, we will resort to minimalism.}
+  \end{frame}
+
+  \begin{frame}{the practice}
+    \hero{build a \copperaccent{small, runnable} version yourself.}
+    \subhero{mostly python and numpy and small enough to read fully.}
+  \end{frame}
+
+  \begin{frame}{what you trade}
+    \begin{itemize}
+      \item[\textcolor{cwTeal}{+}] visibility: every intermediate value is in front of you.
+      \item[\textcolor{cwTeal}{+}] debuggability: a wrong value traces to one line.
+      \item[\textcolor{cwTeal}{+}] intuition: the shapes show what each piece is
+				for (puzzles, y’all!).
+      \item[\textcolor{mute}{\textbar}] \textcolor{mute}{out of scope: scale, throughput, benchmark numbers.}
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{the setup}
+    \begin{itemize}
+      \item just \copperaccent{numpy arrays}, a loop, maybe a plot.
+      \item \copperaccent{shape-first}: the shapes are most of the program.
+      \item the notation in papers is shorthand for the array code.
+    \end{itemize}
+    \subhero{one trip to the terminal to build a transformer ourselves.}
+  \end{frame}
+
+  % ==================================================================
+  \section{a tiny transformer, end to end}
+  % one orienting slide, then the live build
+  % ==================================================================
+  \begin{frame}{what a transformer computes}
+    \vfill
+    \begin{columns}[T]
+      \begin{column}{0.5\textwidth}
+        {\ttfamily\large\color{cwTeal}%
+          \renewcommand{\arraystretch}{1.7}%
+          \begin{tabular}{@{}r@{~~}l@{}}
+                  & tokens \\
+            $\to$ & embeddings \\
+            $\to$ & (attn + mlp) $\times N$ \\
+            $\to$ & outputs \\
+          \end{tabular}}
+      \end{column}
+      \begin{column}{0.46\textwidth}
+        {\cwhankenbody\normalsize\color{cwInk}
+          a stack of identical layers. each updates every position from all positions.\par}
+        \vspace{1em}
+        {\cwhankenbody\small\color{cwMuted}
+          a token is a chunk of text, an embedding its vector. attention mixes
+          across positions, the mlp transforms each position on its own.\par}
+      \end{column}
+    \end{columns}
+    \vfill
+  \end{frame}
+
+  \begin{frame}{self-attention}
+    \claim{a weighted average of all positions, with data-dependent weights.}
+      {scores = Q K$^\top$ / $\sqrt{d_k}$ \\[0.4em] out = softmax(scores) V}
+      {Q, K, V are linear projections of the input. scores is (T, T): how much each
+       position draws from the others.}
+  \end{frame}
+
+  \begin{frame}[fragile]{softmax}
+    \vfill
+\begin{lstlisting}[language=Python]
+def softmax(x):
+    x = x - x.max(-1, keepdims=True)   # row max
+    e = np.exp(x)
+    return e / e.sum(-1, keepdims=True)
+\end{lstlisting}
+    \vskip6pt
+    \subhero{softmax maps a vector to a probability distribution. subtracting the
+    row max is the numerically stable form: identical result, no overflow in
+    \texttt{exp}.}
+  \end{frame}
+
+  \begin{frame}{residual connections}
+    \claim{the addition lets gradients reach every layer.}
+      {x = x + attn(ln(x)) \\[0.4em] x = x + mlp(ln(x))}
+      {the residual connection, from resnets (2015). deep stacks need it to train.}
+  \end{frame}
+
+  \begin{frame}{layer normalization}
+    \claim{keeps activations from drifting as depth grows.}
+      {y = $\gamma$ \,(x $-\ \mu$) / $\sqrt{\sigma^2 + \varepsilon}$\, $+\ \beta$}
+      {$\mu, \sigma$: mean and variance over the feature axis, per position.
+       $\gamma, \beta$: learned. $\varepsilon$: avoids dividing by zero.}
+  \end{frame}
+
+  \livecode{let's build one.}
+
+  \begin{frame}{invariants need asserts}
+    \begin{itemize}
+      \item each row of \texttt{softmax(scores)} sums to \copperaccent{1}.
+      \item shape is preserved: \texttt{(T, d) $\to$ (T, d)}.
+      \item layer norm output has \copperaccent{mean 0, variance 1} before $\gamma, \beta$.
+      \item permute the positions, and the outputs permute identically.
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}[t]{a transformer block}
+    \vskip0.09\paperheight
+    \cwstat{$\sim$60}{lines of numpy, no framework}
+    \vskip0.07\paperheight
+    {\color{cwRule}\hrule height0.6pt}\vskip10pt
+    {\cwhankenbody\color{cwFaint}\small attention, layer normalization, an mlp,
+		residual connections, and the tests that pin them down. production models
+		are this block, only wider and deeper. but: the operations are the same!}
+  \end{frame}
+
+  % ==================================================================
+  \section{paper to prototype}
+  % the transferable method
+  % ==================================================================
+  \begin{frame}{read an equation as an array program}
+    \begin{itemize}
+      \item every symbol is an array, every subscript is an axis.
+      \item a $\sum_j$ is a matmul or a \texttt{.sum(axis=j)}.
+      \item write the \copperaccent{shapes} in a comment before the code.
+    \end{itemize}
+    \subhero{if the shapes line up, you usually understand the mechanics of the formula.}
+  \end{frame}
+
+  \begin{frame}{catch bugs early with boring things}
+    \begin{itemize}
+      \item \copperaccent{shape asserts} at every boundary, not just the end.
+      \item \copperaccent{unit tests for the math}: a known input, a hand-checked output.
+      \item the \copperaccent{overfit test}: fit ten examples exactly. if you can't, it's broken.
+    \end{itemize}
+  \end{frame}
+
+  % ==================================================================
+  \section{multi-scale modelling (rgm)}
+  % second architecture, shown from verified source
+  % ==================================================================
+  \begin{frame}{structure across scales}
+    \hero{many signals carry structure at \copperaccent{several scales at once}:\\[0.3em]
+    images, audio, text, physical fields.}
+    \subhero{model the coarse structure first, then refine it.}
+  \end{frame}
+
+  \begin{frame}{coarse to fine}
+    \claim{a resolution pyramid: model coarse structure first, detail after.}
+      {down: (N) $\to$ (N/2) \\[0.3em] up: (N/2) $\to$ (N)}
+      {coarse levels are small and global, fine levels carry details.}
+  \end{frame}
+
+  \begin{frame}{renormalization}
+    \claim{apply the \emph{same} operator at every scale.}
+      {x$_\ell$ = block(down(x$_{\ell+1}$)) \\[0.4em] for each level $\ell$}
+      {borrowed from the renormalization group in physics: coarse-grain, model,
+       repeat. \texttt{block} is the same weights at every level $\ell$.}
+  \end{frame}
+
+  \begin{frame}{generativity}
+    \hero{run the pyramid the other way: start coarse,\\[0.3em]
+    \copperaccent{invent detail} scale by scale.}
+    \subhero{a learned model at each scale adds the next level of detail. image
+		example: it produces new images, it doesn't just process the ones you give it.}
+  \end{frame}
+
+  % ==================================================================
+  \section{state-space models}
+  % third architecture, source not live
+  % ==================================================================
+  \begin{frame}{attention has a cost problem}
+    \hero{it compares every pair of positions,\\[0.3em]
+    so doubling the input \copperaccent{quadruples} the work.}
+    \subhero{state-space models do sequence modelling in linear time: audio, dna, whole documents.}
+  \end{frame}
+
+  \begin{frame}{a state-space model}
+    \hero{a loop with memory: walk the sequence,\\[0.3em]
+    carry a running state, \copperaccent{update it each step}.}
+    \subhero{\texttt{state = A\,state + B\,input}, then \texttt{output = C\,state}. like an rnn, but every step is linear.}
+  \end{frame}
+
+  \begin{frame}{one model with two forms}
+    \hero{because the loop is linear, it is also\\[0.3em]
+    a single \copperaccent{convolution} over the sequence.}
+    \subhero{train as the convolution (whole sequence in parallel), run as the
+		recurrence (one step, cheap memory). using the same weights!}
+  \end{frame}
+
+  \begin{frame}{attention also has a memory problem}
+    \hero{to make the next token, it holds\\[0.3em]
+    \copperaccent{every earlier token} in memory.}
+    \subhero{that store grows with the sequence and never shrinks.}
+  \end{frame}
+
+  \begin{frame}{constant memory}
+    \hero{a \copperaccent{fixed-size} state summarises the whole past,\\[0.3em]
+    however long the sequence.}
+    \subhero{and it's durable: save or reload it. state is a first-class object.}
+  \end{frame}
+
+  % ==================================================================
+  \section{your own tiny model lab}
+  % ==================================================================
+  \begin{frame}{a reusable harness}
+    \hero{we looked at three very different models.\\[0.3em]
+    we used the \copperaccent{same scaffold} around each.}
+    \subhero{a dataset you can overfit, a shape-checked forward pass, invariants
+		as tests. build infra for your lab!}
+  \end{frame}
+
+  \begin{frame}{when to stop}
+    \hero{the toy is for \copperaccent{understanding}.\\[0.3em]
+    when you need scale, reach for pytorch, jax, w/e.}
+  \end{frame}
+
+  \begin{frame}{the takeaway}
+    \hero{a paper is a specification.\\[0.3em]
+    \copperaccent{implement the smallest version that runs}.}
+		\subhero{try to stay true to the ideas only.}
+  \end{frame}
