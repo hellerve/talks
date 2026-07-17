@@ -1,24 +1,18 @@
 """
-A state-space model, two ways.
+a state-space model in recurrence and convolution.
 
-The whole architecture is a linear recurrence over a hidden state:
+the whole architecture is a linear recurrence over a hidden state:
 
     h_t = A h_{t-1} + B x_t        (state update)
     y_t = C h_t                    (readout)
 
-That runs one step at a time, like an RNN. Unrolled, the same model is a
+that runs one step at a time, like an rnn. the same model is a
 single convolution with a kernel built from the matrices:
 
     y = x * K,   K = (CB, CAB, CA^2 B, ...)
 
-Recurrent to run cheap, convolutional to train in parallel. The two views
-MUST agree on every input -- and that equality is both the test and the
-whole insight.
-
-Run it:   python3.12 demo.py
-
-Slides are cut from this file; it is not typed live. The punchline is the
-assert in `__main__`: two schedules, one model, identical output.
+recurrent to run cheap, convolutional to train in parallel. the two views
+MUST agree on every input. that equality is a useful test.
 """
 
 import numpy as np
