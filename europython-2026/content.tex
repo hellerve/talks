@@ -31,11 +31,11 @@
 
   \begin{frame}{the setup}
     \begin{itemize}
-      \item just \copperaccent{numpy arrays}, a loop, maybe a plot.
-      \item \copperaccent{shape-first}: the shapes are most of the program.
+      \item just \copperaccent{numpy arrays}, empasizing the shapes (they are
+				most of the program).
       \item the notation in papers is shorthand for the array code.
     \end{itemize}
-    \subhero{one trip to the terminal to build a transformer ourselves.}
+    \subhero{a trip to the terminal to build a transformer ourselves.}
   \end{frame}
 
   % ==================================================================
@@ -102,15 +102,6 @@ def softmax(x):
   \end{frame}
 
   \livecode{let's build one.}
-
-  \begin{frame}{invariants need asserts}
-    \begin{itemize}
-      \item each row of \texttt{softmax(scores)} sums to \copperaccent{1}.
-      \item shape is preserved: \texttt{(T, d) $\to$ (T, d)}.
-      \item layer norm output has \copperaccent{mean 0, variance 1} before $\gamma, \beta$.
-      \item permute the positions, and the outputs permute identically.
-    \end{itemize}
-  \end{frame}
 
   \begin{frame}[t]{a transformer block}
     \vskip0.09\paperheight
@@ -213,9 +204,8 @@ def softmax(x):
   % ==================================================================
   \begin{frame}{a reusable harness}
     \hero{we looked at three very different models.\\[0.3em]
-    we used the \copperaccent{same scaffold} around each.}
-    \subhero{a dataset you can overfit, a shape-checked forward pass, invariants
-		as tests. build infra for your lab!}
+    we can use the \copperaccent{same scaffold} for each.}
+    \subhero{datasets, tests, math. build infra for your lab!}
   \end{frame}
 
   \begin{frame}{when to stop}
